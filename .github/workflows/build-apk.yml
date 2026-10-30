@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Android APKs
 
 on:
   push:
@@ -27,14 +27,25 @@ jobs:
       - name: Install Cordova CLI
         run: npm install -g cordova
 
-      - name: Build Android Platform & APK
+      - name: Build Customer APK
         run: |
           cordova platform add android
           cordova build android --debug
-          mv platforms/android/app/build/outputs/apk/debug/app-debug.apk platforms/android/app/build/outputs/apk/debug/Ritubij.apk
+          mkdir -p apks
+          mv platforms/android/app/build/outputs/apk/debug/app-debug.apk apks/Ritubij.apk
 
-      - name: Upload APK
+      - name: Build Admin APK
+        run: |
+          cordova platform rm android
+          sed -i 's/<name>Ritubij<\/name>/<name>Ritubij Admin<\/name>/' config.xml
+          sed -i 's/id="com.ritubij.app"/id="com.ritubij.admin"/' config.xml
+          sed -i 's/<content src="index.html" \/>/<content src="admin.html" \/>/' config.xml
+          cordova platform add android
+          cordova build android --debug
+          mv platforms/android/app/build/outputs/apk/debug/app-debug.apk apks/Ritubij-Admin.apk
+
+      - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
-          name: Ritubij-App-APK
-          path: platforms/android/app/build/outputs/apk/debug/Ritubij.apk
+          name: Ritubij-APKs
+          path: apks/*.apk
