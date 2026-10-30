@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ঋতুবীজ | খাঁটি ঐতিহ্য ও মৌসুমী সম্ভার</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ১. প্রিমিয়াম টপ নোটিশ বার (স্ক্রলিং এনিমেশন সহ) -->
+    <div class="top-notice-bar" id="topNoticeBar">
+        <div class="container top-notice-inner">
+            <span class="notice-badge">অফার</span>
+            <div class="notice-marquee-wrap">
+                <span class="notice-marquee-content" id="announcementText">সারা দেশে ক্যাশ অন ডেলিভারি! এখনই অর্ডার করুন, ঘরে বসে পান প্রকৃতির বিশুদ্ধ উপহার।</span>
+            </div>
+            <button class="notice-close-btn" onclick="document.getElementById('topNoticeBar').style.display='none'" title="বন্ধ করুন">✕</button>
+        </div>
+    </div>
+
+<!-- ২. আধুনিক প্রিমিয়াম হেডার (ইনলাইন স্মার্ট সার্চ সহ) -->
+    <header class="main-header">
+        <div class="container header-container" style="position: relative;">
+            <a href="#" class="brand-area" id="headerBrandArea">
+                <div class="brand-icon-box" id="mainHeaderBrandBox">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                </div>
+                <script>
+                    (function(){
+                        var c = localStorage.getItem('cachedSiteLogo');
+                        if(c){
+                            var el = document.getElementById('mainHeaderBrandBox');
+                            if(el) el.innerHTML = '<img src="'+c+'" alt="লোগো" style="width:100%; height:100%; border-radius:inherit; object-fit:contain; display:block;">';
+                        }
+                    })();
+                </script>
+                <div class="brand-text-block">
+                    <h1 class="brand-en-title">ঋতুবীজ</h1>
+                    <p class="brand-bn-subtitle">প্রকৃতির খাঁটি ঐতিহ্য</p>
+                </div>
+            </a>
+
+            <!-- হেডারের নিজস্ব ইনলাইন সার্চ ইনপুট (ব্যানার ওভারল্যাপ সম্পূর্ণ বন্ধ) -->
+            <div class="header-inline-search-bar" id="headerSearchDropdown" style="display: none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" id="headerSearchInput" placeholder="পণ্য খুঁজুন (যেমন: আম, গুড়, আচার)..." oninput="handleHeaderLiveSearch(this.value)" onkeydown="if(event.key==='Enter') executeHeaderSearch()">
+                <button type="button" class="btn-close-search" onclick="clearAndCloseHeaderSearch()" title="সার্চ বাতিল করুন">✕</button>
+            </div>
+
+            <!-- হেডারের ডানপাশের বাটনসমূহ (সার্চ ও প্রোফাইল) -->
+            <div class="header-actions">
+                <button onclick="toggleHeaderSearch()" class="header-action-btn btn-circle-act" id="btnToggleSearch" title="পণ্য খুঁজুন">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </button>
+
+                <button onclick="openProfileModal()" class="header-action-btn btn-circle-act" title="প্রোফাইল">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- হিরো ব্যানার স্লাইডার -->
+        <section class="hero-banner-wrapper">
+            <a href="#products" class="hero-slider-box" id="heroSliderBox" title="পণ্য সম্ভার দেখতে ক্লিক করুন">
+                <div class="slider-track" id="sliderTrack"></div>
+                <div class="slider-dots" id="sliderDots"></div>
+            </a>
+        </section>
+
+        <!-- ৪টি ট্রাস্ট ফিচার ব্যাজ -->
+        <section class="trust-cards-row">
+            <div class="trust-pill-box">
+                <div class="trust-icon-leaf">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                </div>
+                <div class="trust-text-block">
+                    <h4>১০০% প্রাকৃতিক</h4>
+                    <p>ভেজালমুক্ত বিশুদ্ধ উপাদান</p>
+                </div>
+            </div>
+            <div class="trust-pill-box">
+                <div class="trust-icon-leaf">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                </div>
+                <div class="trust-text-block">
+                    <h4>নিরাপদ প্যাকেজিং</h4>
+                    <p>অক্ষত অবস্থায় পৌঁছে দেওয়া</p>
+                </div>
+            </div>
+            <div class="trust-pill-box">
+                <div class="trust-icon-leaf">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+                </div>
+                <div class="trust-text-block">
+                    <h4>দ্রুত ডেলিভারি</h4>
+                    <p>সারা দেশে সহজ সরবরাহ</p>
+                </div>
+            </div>
+            <div class="trust-pill-box">
+                <div class="trust-icon-leaf">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+                <div class="trust-text-block">
+                    <h4>ক্যাশ অন ডেলিভারি</h4>
+                    <p>পণ্য পেয়ে মূল্য পরিশোধ</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- পণ্য সম্ভার সেকশন -->
+        <section id="products" class="products-section">
+            <div class="section-title-wrap">
+                <span class="section-tag-pill">আমাদের সংগ্রহ</span>
+                <h2 class="section-main-title">বিশুদ্ধ দেশি সম্ভার</h2>
+                <p class="section-subtext">বাংলার ঐতিহ্যবাহী খাঁটি স্বাদের সেরা সংগ্রহ সরাসরি আপনার ঘরে</p>
+            </div>
+
+            <!-- আধুনিক ক্যাটাগরি ফিল্টার পিলস -->
+            <div class="tab-box-modern">
+                <button class="tab-btn-pill active" data-cat="all">সব পণ্য</button>
+                <button class="tab-btn-pill" data-cat="aam">আম</button>
+                <button class="tab-btn-pill" data-cat="gur">গুড়</button>
+                <button class="tab-btn-pill" data-cat="aachar">আচার</button>
+            </div>
+
+            <!-- আধুনিক প্রোডাক্ট গ্রিড -->
+            <div class="product-cards-grid-v2" id="productGrid">
+                <p style="text-align:center; grid-column:1/-1; padding:30px; color:#888;">পণ্য লোড হচ্ছে...</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- আধুনিক পূর্ণাঙ্গ ফুল-স্ক্রিন প্রোডাক্ট ডিটেইলস পেজ -->
+    <div id="productDetailPageView" class="app-page-view" style="display: none; background: #FDFCF9; min-height: 100vh; padding-bottom: 30px;">
+        <div class="container" style="max-width: 600px; padding-top: 14px;">
+            
+            <!-- সমন্বিত একক প্রিমিয়াম প্রোডাক্ট কার্ড (ছবি + তথ্য একসাথে) -->
+            <div style="background: #FFFFFF; border: 1px solid var(--card-border); border-radius: 20px; overflow: hidden; margin-bottom: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.03);">
+                <!-- প্রোডাক্ট ছবি -->
+                <div style="width: 100%; aspect-ratio: 1.15 / 1; background: #F3F4F6; overflow: hidden; position: relative;">
+                    <img id="detProdImg" src="" alt="Product" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                </div>
+
+                <!-- ভেতরের তথ্য অংশ (কমপ্যাক্ট ও পরিপাটি স্পেসিং) -->
+                <div style="padding: 12px 14px 14px;">
+                    <!-- পণ্যের নাম -->
+                    <h2 id="detProdName" style="font-size: 17.5px; font-weight: 800; color: #111827; margin-bottom: 4px; line-height: 1.25;">পণ্যের নাম</h2>
+                    
+                    <!-- মূল্য ও ডিসকাউন্ট -->
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                        <span id="detProdPrice" style="font-size: 19px; font-weight: 800; color: #E63946; line-height: 1;">৳ ০</span>
+                        <span id="detProdRegularPrice" style="font-size: 13.5px; color: #9CA3AF; text-decoration: line-through; font-weight: 600;"></span>
+                        <span id="detSaveBadge" style="background: #FDE68A; color: #92400E; font-size: 10.5px; font-weight: 800; padding: 2px 8px; border-radius: 10px; display: none;"></span>
+                    </div>
+
+                    <!-- পরিমাণ নির্বাচন বক্স -->
+                    <div style="background: #F9FBFA; border: 1px solid var(--card-border); border-radius: 12px; padding: 6px 12px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 12px; font-weight: 700; color: #374151;">পরিমাণ নির্বাচন করুন</span>
+                        <div class="qty-pill-stepper" style="background: #FFF; padding: 2px;">
+                            <button type="button" class="btn-step-act" onclick="changeDetQty(-1)" style="width: 26px; height: 26px;">−</button>
+                            <span class="step-num-text" id="detQtyDisplay" style="font-size: 12px; padding: 0 8px;">১ কেজি</span>
+                            <button type="button" class="btn-step-act" onclick="changeDetQty(1)" style="width: 26px; height: 26px;">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ৩. অ্যাকশন বাটনসমূহ (SVG আইকন সহ) -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+                <button type="button" onclick="addCurrentDetToCart()" style="background: #E8F3ED; color: var(--primary); border: 1px solid #C2DED1; border-radius: 25px; padding: 13px; font-size: 13.5px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                    <span>কার্টে যোগ করুন</span>
+                </button>
+                <button type="button" onclick="buyNowFromDet()" class="btn-confirm-sheet-order" style="border-radius: 25px; padding: 13px; font-size: 13.5px;">
+                    <span>অর্ডার করুন</span>
+                </button>
+            </div>
+
+            <!-- ৪ ও ৫. কমপ্যাক্ট বিবরণ ও মার্জিত ডেলিভারি স্ট্রিপ (SVG আইকন সহ) -->
+            <div style="background: #FFFFFF; border: 1px solid var(--card-border); border-radius: 18px; padding: 14px 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                <!-- স্লিম ডেলিভারি টাইমলাইন স্ট্রিপ -->
+                <div style="background: #F4FAF6; border: 1px solid #D1E7D8; border-radius: 12px; padding: 8px 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; text-align: center;">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#123C27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                        <div style="text-align: left; line-height: 1.15;">
+                            <span style="font-size: 11px; font-weight: 700; color: #111827; display: block;">অর্ডার গ্রহণ</span>
+                            <small style="font-size: 9.5px; color: #6B7280;">আজ</small>
+                        </div>
+                    </div>
+                    <span style="color: #CBD5E1; font-size: 12px;">›</span>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#123C27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        <div style="text-align: left; line-height: 1.15;">
+                            <span style="font-size: 11px; font-weight: 700; color: #111827; display: block;">প্রসেসিং</span>
+                            <small style="font-size: 9.5px; color: #6B7280;">আগামীকাল</small>
+                        </div>
+                    </div>
+                    <span style="color: #CBD5E1; font-size: 12px;">›</span>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#15803D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+                        <div style="text-align: left; line-height: 1.15;">
+                            <span style="font-size: 11px; font-weight: 700; color: #15803D; display: block;">ডেলিভারি</span>
+                            <small style="font-size: 9.5px; color: #15803D; font-weight: 700;">২-৩ দিন</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- পণ্যের বিস্তারিত বিবরণ -->
+                <div style="padding-top: 2px;">
+                    <h4 style="font-size: 13.5px; font-weight: 800; color: var(--primary); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        <span>পণ্যের বিবরণ</span>
+                    </h4>
+                    <p id="detProdDesc" style="font-size: 12.5px; color: #4B5563; line-height: 1.6; margin: 0;">এখানে পণ্যের বিবরণ প্রদর্শিত হবে...</p>
+                </div>
+            </div>
+
+            <!-- ৬. বিবরণীর ঠিক নিচে হোমপেজের মতো ২-কলামের প্রোডাক্ট কার্ড সেকশন -->
+            <div style="margin-top: 10px; margin-bottom: 20px;">
+                <div class="section-title-wrap" style="text-align: left; margin-bottom: 14px;">
+                    <span class="section-tag-pill">আমাদের সম্ভার</span>
+                    <h3 style="font-size: 18px; font-weight: 800; color: var(--primary);">অন্যান্য খাঁটি পণ্যসমূহ</h3>
+                </div>
+                <div class="product-cards-grid-v2" id="detailRelatedGrid">
+                    <!-- হোমপেজের মতো হুবহু ২-কলামের প্রোডাক্ট কার্ড এখানে বসবে -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ট্রাস্ট কার্ডের মতো আধুনিক কাউন্টার মেট্রিক্স গ্রিড -->
+    <section id="metrics" class="metrics-trust-style-section">
+        <div class="container metrics-trust-grid">
+            <!-- কার্ড ১ -->
+            <div class="metric-trust-card">
+                <div class="metric-trust-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+                </div>
+                <div class="metric-trust-text">
+                    <h4><span class="counter" id="counterMango" data-target="0">0</span>+ কেজি</h4>
+                    <p>আম ডেলিভারি সম্পন্ন</p>
+                </div>
+            </div>
+
+            <!-- কার্ড ২ -->
+            <div class="metric-trust-card">
+                <div class="metric-trust-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                </div>
+                <div class="metric-trust-text">
+                    <h4><span class="counter" id="counterGur" data-target="0">0</span>+ কেজি</h4>
+                    <p>খাঁটি গুড় সরবরাহ</p>
+                </div>
+            </div>
+
+            <!-- কার্ড ৩ -->
+            <div class="metric-trust-card">
+                <div class="metric-trust-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="18" x="5" y="3" rx="4"/><path d="M9 3v1"/><path d="M15 3v1"/></svg>
+                </div>
+                <div class="metric-trust-text">
+                    <h4><span class="counter" id="counterAachar" data-target="0">0</span>+ জার</h4>
+                    <p>ঐতিহ্যবাহী আচার</p>
+                </div>
+            </div>
+
+            <!-- কার্ড ৪ -->
+            <div class="metric-trust-card">
+                <div class="metric-trust-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div class="metric-trust-text">
+                    <h4><span class="counter" id="counterFamily" data-target="0">0</span>+</h4>
+                    <p>কারিগর পরিবার</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+<!-- স্লিম ও কমপ্যাক্ট আধুনিক অর্ডার চেকআউট মডাল -->
+    <div class="modal-overlay" id="orderModal" style="position: fixed !important; inset: 0 !important; z-index: 999999 !important; background: rgba(0,0,0,0.6) !important; display: none; align-items: center; justify-content: center; padding: 10px;">
+        <div class="modal-card-v2 order-sheet-modal" style="max-width: 440px; width: 100%; padding: 14px 16px; margin: auto; max-height: 94vh; overflow-y: auto; border-radius: 20px; background: #FFFFFF; box-shadow: 0 16px 36px rgba(0,0,0,0.18);">
+            
+            <!-- স্লিম হেডার সামারি ও ক্লোজ বাটন -->
+            <div class="m-prod-top-header" style="display: flex; align-items: center; gap: 10px; position: relative; padding-bottom: 8px; border-bottom: 1px solid #F1F5F2; margin-bottom: 10px;">
+                <img id="mProdImg" src="" alt="Product" style="width: 46px; height: 46px; border-radius: 10px; object-fit: cover; background: #F3F4F6; flex-shrink: 0; border: 1px solid #E5E7EB;">
+                <div style="flex: 1; min-width: 0;">
+                    <h3 id="mProdName" style="font-size: 15px; font-weight: 800; color: #111827; line-height: 1.2; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">সম্মিলিত অর্ডার</h3>
+                    <p id="mProdRate" style="font-size: 13px; font-weight: 800; color: #0F3826; line-height: 1;">মোট বিল: ৳ ০</p>
+                </div>
+                <button type="button" id="modalCloseBtn" onclick="closeOrderModal()" style="width: 28px; height: 28px; border-radius: 50%; background: #EDF6EE; border: 1px solid #D5EBD9; color: #15803D; font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✕</button>
+            </div>
+
+            <form id="orderForm">
+                <input type="hidden" id="orderQuantity" value="1">
+
+                <!-- কার্টে থাকা পণ্যসমূহ কার্ড (কার্ট চেকআউটের সময় ডাইনামিক বসবে) -->
+                <div id="cartItemsPreviewBox" style="display: none; background: #FFFFFF; border: 1px solid #EBF0EC; border-radius: 14px; padding: 10px; margin-bottom: 10px;"></div>
+
+                <!-- সিঙ্গেল পণ্য পরিমাপ নির্বাচন (স্লিম স্ট্রিপ) -->
+                <div class="m-qty-select-box" style="margin-bottom: 10px; background: #F9FBFA; border: 1px solid var(--card-border); border-radius: 12px; padding: 6px 10px; display: flex; justify-content: space-between; align-items: center;">
+                    <span class="qty-main-title" style="font-size: 12px; font-weight: 700; color: #111827;">পরিমাণ</span>
+                    
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div class="qty-quick-pills" style="display: flex; gap: 4px;">
+                            <button type="button" class="q-pill active" onclick="setQuickQty(1, this)" style="padding: 3px 8px; font-size: 11px;">১</button>
+                            <button type="button" class="q-pill" onclick="setQuickQty(2, this)" style="padding: 3px 8px; font-size: 11px;">২</button>
+                            <button type="button" class="q-pill" onclick="setQuickQty(3, this)" style="padding: 3px 8px; font-size: 11px;">৩</button>
+                        </div>
+
+                        <div class="qty-pill-stepper" style="display: inline-flex; align-items: center; border: 1px solid var(--card-border); border-radius: 10px; background: #FFF; padding: 1px;">
+                            <button type="button" class="btn-step-act" onclick="changeOrderQty(-1)" style="width: 24px; height: 24px;">−</button>
+                            <span class="step-num-text" id="qtyDisplay" style="font-size: 11.5px; padding: 0 6px;">১</span>
+                            <button type="button" class="btn-step-act" onclick="changeOrderQty(1)" style="width: 24px; height: 24px;">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- কাস্টমার ডেলিভারি তথ্য কার্ড (কমপ্যাক্ট প্যাডিং) -->
+                <div class="m-customer-info-card" style="background: #F9FBFA; border: 1px solid #EBF0EC; border-radius: 14px; padding: 10px 12px; margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div style="display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 800; color: #0F3826;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0F3826" stroke-width="2.2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span>ডেলিভারি ঠিকানা</span>
+                        </div>
+                        <span id="autoFillBadge" style="background: #E2F1E7; color: #15803D; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 8px; display: inline-flex; align-items: center; gap: 3px;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+                            <span>অটো-ফিল</span>
+                        </span>
+                    </div>
+
+                    <!-- নাম ইনপুট -->
+                    <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; padding: 6px 10px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <div style="flex: 1; display: flex; flex-direction: column;">
+                            <label style="font-size: 9.5px; font-weight: 700; color: #64748B; margin-bottom: 1px;">আপনার নাম</label>
+                            <input type="text" id="orderName" placeholder="পূর্ণ নাম লিখুন" required style="border: none; outline: none; background: transparent; font-size: 12.5px; font-weight: 600; color: #111827; padding: 0;">
+                        </div>
+                    </div>
+
+                    <!-- মোবাইল ইনপুট -->
+                    <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; padding: 6px 10px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.4 19.4 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.2-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.8 2.1Z"/></svg>
+                        <div style="flex: 1; display: flex; flex-direction: column;">
+                            <label style="font-size: 9.5px; font-weight: 700; color: #64748B; margin-bottom: 1px;">মোবাইল নম্বর</label>
+                            <input type="tel" id="orderPhone" placeholder="০১৭XXXXXXXX" required style="border: none; outline: none; background: transparent; font-size: 12.5px; font-weight: 600; color: #111827; padding: 0;">
+                        </div>
+                    </div>
+
+                    <!-- ঠিকানা ইনপুট -->
+                    <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; padding: 6px 10px; display: flex; align-items: flex-start; gap: 8px;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" style="margin-top: 2px;"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                        <div style="flex: 1; display: flex; flex-direction: column;">
+                            <label style="font-size: 9.5px; font-weight: 700; color: #64748B; margin-bottom: 1px;">সম্পূর্ণ ঠিকানা</label>
+                            <textarea id="orderAddress" rows="1" placeholder="বাসা/রোড, এলাকা ও জেলা" required style="border: none; outline: none; background: transparent; font-size: 12.5px; font-weight: 600; color: #111827; padding: 0; resize: none; font-family: inherit; line-height: 1.3;"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- স্লিম মূল্য সারাংশ ও মোট বিল কার্ড -->
+                <div class="m-price-summary-card" style="background: #FFFFFF; border: 1px solid #EBF0EC; border-radius: 14px; padding: 10px 12px; margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 12px; color: #4B5563;">
+                        <span id="sumProdQtyLabel">পণ্য মূল্য</span>
+                        <span id="sumProdPrice" style="font-weight: 800; color: #111827;">৳ ০</span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12px; color: #4B5563;">
+                        <span>ডেলিভারি চার্জ</span>
+                        <span id="checkoutDeliveryBadge" style="background: #E8F5EE; color: #15803D; font-size: 10.5px; font-weight: 700; padding: 1px 7px; border-radius: 8px;">ফ্রি ডেলিভারি</span>
+                    </div>
+
+                    <div style="border-top: 1px dashed #E5EBE7; margin: 6px 0;"></div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span style="font-size: 13px; font-weight: 800; color: #0F3826; display: block;">সর্বমোট প্রদেয় বিল</span>
+                            <small style="font-size: 9.5px; color: #64748B;">ক্যাশ অন ডেলিভারি</small>
+                        </div>
+                        <span id="sumTotalPrice" style="font-size: 17px; font-weight: 800; color: #0F3826;">৳ ০</span>
+                    </div>
+                </div>
+
+                <!-- অর্ডার কনফার্ম বাটন -->
+                <button type="submit" class="btn-confirm-sheet-order" id="submitBtn" style="border-radius: 20px; padding: 10px; font-size: 14px; width: 100%; background: #0E3E28; color: #FFF; border: none; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <span>অর্ডার কনফার্ম করুন</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- স্লিম ও কমপ্যাক্ট প্রিমিয়াম অর্ডার সাকসেস স্ক্রিন -->
+    <div class="success-overlay" id="orderSuccessModal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 100000; display: none; align-items: center; justify-content: center; padding: 12px; overflow-y: auto;">
+        <div class="success-card-container" style="background: #FFFFFF; border-radius: 20px; max-width: 420px; width: 100%; padding: 18px 16px 14px; position: relative; margin: auto; max-height: 94vh; overflow-y: auto; box-shadow: 0 16px 36px rgba(0,0,0,0.18); text-align: center;">
+            
+            <!-- টপ ক্লোজ বাটন -->
+            <button type="button" onclick="closeSuccessAndGo('#')" style="position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; border-radius: 50%; background: #EDF6EE; border: 1px solid #D5EBD9; color: #15803D; font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10;">✕</button>
+
+            <!-- ওপরের মার্জিত টিকচিহ্ন ও ডেলিভারি ব্যাজ (SVG সহ) -->
+            <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 10px;">
+                <div style="width: 48px; height: 48px; border-radius: 50%; background: #15803D; color: #FFF; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(21,128,61,0.22); margin-bottom: 6px;">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <h2 style="font-size: 16.5px; font-weight: 800; color: #0F3826; margin-bottom: 2px; line-height: 1.2;">অর্ডার সফল হয়েছে!</h2>
+                <span style="font-size: 11px; color: #15803D; background: #E8F5EE; padding: 3px 10px; border-radius: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#15803D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+                    <span>২-৩ দিনের মধ্যে ডেলিভারি</span>
+                </span>
+            </div>
+
+            <!-- সমন্বিত একক কার্ড (অর্ডার নম্বর + পণ্যের সারসংক্ষেপ) -->
+            <div style="background: #F9FBFA; border: 1px solid #EBF0EC; border-radius: 14px; padding: 10px 12px; margin-bottom: 10px; text-align: left;">
+                <!-- অর্ডার আইডি ও কপি বাটন -->
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px dashed #E5EBE7; margin-bottom: 8px;">
+                    <div>
+                        <span style="font-size: 10px; color: #64748B; display: block;">অর্ডার কোড:</span>
+                        <span id="succOrderId" style="font-size: 14px; font-weight: 800; color: #0F3826; letter-spacing: -0.2px;">RR-2026-00000</span>
+                    </div>
+                    <button type="button" onclick="copySuccessOrderId()" style="background: #EDF6EE; border: 1px solid #D5EBD9; padding: 3px 8px; border-radius: 8px; color: #0F3826; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0F3826" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                        <span>কপি</span>
+                    </button>
+                </div>
+
+                <!-- পণ্যের তথ্য -->
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                    <div id="succProdThumbContainer" style="display: flex; align-items: center; flex-shrink: 0;">
+                        <img id="succProdImg" src="" alt="Product" style="width: 42px; height: 42px; border-radius: 10px; object-fit: cover; background: #FFF; border: 1px solid #E5E7EB;">
+                    </div>
+                    
+                    <div style="flex: 1; min-width: 0; padding-left: 2px;">
+                        <h4 id="succProdName" style="font-size: 13px; font-weight: 800; color: #111827; margin-bottom: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">পণ্যের নাম</h4>
+                        <p id="succProdQtyUnit" style="font-size: 11px; color: #64748B; margin: 0;">১ আইটেম</p>
+                        <p id="succProdRate" style="display: none;"></p>
+                    </div>
+
+                    <div style="text-align: right; flex-shrink: 0;">
+                        <span style="font-size: 9.5px; color: #64748B; display: block;">মোট প্রদেয়</span>
+                        <span id="succTotalPrice" style="font-size: 15px; font-weight: 800; color: #0F3826;">৳ ০</span>
+                    </div>
+                </div>
+
+                <!-- ক্যাশ অন ডেলিভারি ট্যাগ (SVG সহ) -->
+                <div style="margin-top: 8px; padding-top: 6px; border-top: 1px dashed #E5EBE7; font-size: 10.5px; color: #334155; font-weight: 600; display: flex; align-items: center; gap: 5px;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#15803D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                    <span>পেমেন্ট: <strong>ক্যাশ অন ডেলিভারি</strong> (পণ্য পেয়ে পরিশোধ)</span>
+                </div>
+            </div>
+
+            <!-- প্রধান দুটি অ্যাকশন বাটন (SVG সহ) -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+                <button type="button" onclick="closeSuccessAndGo('#products')" style="background: #0E3E28; color: #FFF; border: none; padding: 9px; border-radius: 20px; font-size: 12.5px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                    <span>আরও পণ্য দেখুন</span>
+                </button>
+                <button type="button" onclick="closeSuccessAndGo('#')" style="background: #FFFFFF; color: #0E3E28; border: 1.5px solid #0E3E28; padding: 9px; border-radius: 20px; font-size: 12.5px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0E3E28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    <span>হোমপেজে ফিরুন</span>
+                </button>
+            </div>
+
+            <!-- স্লিম WhatsApp সহায়তা লিংক -->
+            <div style="background: #F1F8F4; border-radius: 12px; padding: 7px 10px; display: flex; justify-content: space-between; align-items: center; text-align: left;">
+                <span style="font-size: 11px; color: #111827; font-weight: 600;">কোনো প্রশ্ন বা পরিবর্তন আছে?</span>
+                <a href="#" id="succWaBtn" target="_blank" style="background: #15803D; color: #FFF; text-decoration: none; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;">
+                    <span>WhatsApp</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ছবির হুবহু পূর্ণাঙ্গ "আমার অর্ডারসমূহ" পেজ স্ক্রিন -->
+    <div id="ordersPageView" class="app-page-view" style="display: none;">
+        <div class="container orders-page-container">
+            
+            
+
+            <!-- ছবির হুবহু ৪টি ফিল্টার পিলস (কাউন্ট ব্যাজ সহ) -->
+            <div class="order-filter-pills-row">
+                <button type="button" class="op-pill-btn active" onclick="filterMyOrders('all', this)">
+                    <span>সব অর্ডার</span>
+                    <span class="pill-badge-num count-all" id="ordCountAll">০</span>
+                </button>
+                <button type="button" class="op-pill-btn pill-pending" onclick="filterMyOrders('Pending', this)">
+                    <span>পেন্ডিং</span>
+                    <span class="pill-badge-num count-pending" id="ordCountPending">০</span>
+                </button>
+                <button type="button" class="op-pill-btn pill-confirmed" onclick="filterMyOrders('Confirmed', this)">
+                    <span>কনফার্মড</span>
+                    <span class="pill-badge-num count-confirmed" id="ordCountConfirmed">০</span>
+                </button>
+                <button type="button" class="op-pill-btn pill-delivered" onclick="filterMyOrders('Delivered', this)">
+                    <span>ডেলিভার্ড</span>
+                    <span class="pill-badge-num count-delivered" id="ordCountDelivered">০</span>
+                </button>
+            </div>
+
+            <!-- আসল অর্ডারের কার্ড তালিকা লোড হওয়ার স্থান -->
+            <div id="trackResultArea" class="orders-cards-list">
+                <div class="orders-empty-loading">
+                    <p>অর্ডারের তথ্য লোড হচ্ছে...</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- পূর্ণাঙ্গ স্বাধীন "পছন্দের পণ্যসমূহ" পেজ স্ক্রিন -->
+    <div id="favoritesPageView" class="app-page-view" style="display: none;">
+        <div class="container favorites-page-container" style="max-width: 680px; padding-top: 14px; padding-bottom: 40px;">
+            
+            <!-- টপ হেডার বার (হোমে ফেরার বাটন ও কাউন্ট) -->
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; background: #FFF; padding: 12px 16px; border-radius: 16px; border: 1px solid var(--card-border); box-shadow: 0 1px 4px rgba(0,0,0,0.02);">
+                <button type="button" onclick="navigateToScreen('home')" style="background: none; border: none; font-size: 13.5px; font-weight: 700; color: var(--primary); cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    <span>← পণ্যসমূহ দেখুন</span>
+                </button>
+                <div style="text-align: right;">
+                    <h3 style="font-size: 14px; font-weight: 800; color: var(--text-main); line-height: 1.2;">পছন্দের পণ্যসমূহ</h3>
+                    <small id="favSubtitleCount" style="font-size: 11px; color: var(--text-muted); font-weight: 600;">লোড হচ্ছে...</small>
+                </div>
+            </div>
+
+            <!-- পছন্দ করা পণ্যের গ্রিড -->
+            <div class="product-cards-grid-v2" id="favoritesGridContainer">
+                <!-- ফেভারিট পণ্যগুলো এখানে লোড হবে -->
+            </div>
+
+        </div>
+    </div>
+
+<!-- পূর্ণাঙ্গ প্রিমিয়াম "শপিং কার্ট" পেজ স্ক্রিন (নতুন ছবির হুবহু ডিজাইন) -->
+    <div id="cartPageView" class="app-page-view" style="display: none;">
+        <div class="container" style="max-width: 600px; padding-top: 14px; padding-bottom: 95px;">
+            
+            <!-- স্লিম কার্ট সাব-হেডার -->
+            <div id="cartSubHeaderRow" style="display: none; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 2px;">
+                <div style="display: flex; align-items: center; gap: 6px; font-size: 16px; font-weight: 800; color: #0F3826;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F3826" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                    <span>শপিং কার্ট</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 700; color: #64748B;">
+                    <span id="cartPageHeaderCount">০ টি পণ্য</span>
+                </div>
+            </div>
+
+            <!-- কার্ট পণ্যের কার্ডসমূহ ডাইনামিকভাবে জাভাস্ক্রিপ্ট থেকে বসবে -->
+            <div id="cartItemsContainer"></div>
+
+            <!-- কমপ্যাক্ট কার্ট মূল্য সারাংশ ও চেকআউট কার্ড -->
+            <div id="cartSummaryCard" style="display: none; background: #FFFFFF; border: 1px solid #EBF0EC; border-radius: 16px; padding: 12px 14px; margin-top: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                <!-- সারি ১: মোট পণ্য ও ডেলিভারি চার্জ -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12px; color: #4B5563;">
+                    <span>মোট পণ্য সংখ্যা</span>
+                    <span id="cartTotalItemsCount" style="font-weight: 700; color: #111827;">০ টি</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12px; color: #4B5563;">
+                    <span>ডেলিভারি চার্জ</span>
+                    <span id="cartPageDeliveryBadge" style="background: #E8F5EE; color: #15803D; font-size: 10.5px; font-weight: 700; padding: 1px 7px; border-radius: 8px;">ফ্রি ডেলিভারি</span>
+                </div>
+
+                <!-- ডিভাইডার -->
+                <div style="border-top: 1px dashed #E5EBE7; margin: 6px 0;"></div>
+
+                <!-- সারি ২: সর্বমোট প্রদেয় বিল -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div>
+                        <span style="font-size: 13.5px; font-weight: 800; color: #0F3826; display: block; line-height: 1.2;">সর্বমোট প্রদেয় বিল</span>
+                        <small style="font-size: 9.5px; color: #64748B;">ক্যাশ অন ডেলিভারি (পণ্য পেয়ে পরিশোধ)</small>
+                    </div>
+                    <span id="cartTotalPrice" style="font-size: 17px; font-weight: 800; color: #0F3826;">৳ ০</span>
+                </div>
+
+                <!-- সারি ৩: একসঙ্গে অর্ডার কনফার্ম বাটন -->
+                <button type="button" onclick="openCartCheckoutModal()" class="btn-confirm-sheet-order" id="cartCheckoutBtn" style="border-radius: 20px; padding: 10px; font-size: 13.5px; width: 100%; background: #0E3E28; color: #FFF; border: none; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2.2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                    <span>একসঙ্গে অর্ডার কনফার্ম করুন</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- আধুনিক মোবাইল বটম বার (পছন্দের জায়গায় কার্ট) -->
+    <nav class="mobile-bottom-nav">
+        <a href="#" class="b-nav-item active" onclick="handleBottomNav('home', this)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span class="b-nav-label">হোম</span>
+        </a>
+        <a href="javascript:void(0)" class="b-nav-item" onclick="handleBottomNav('orders', this)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+            <span class="b-nav-label">অর্ডার</span>
+        </a>
+        <a href="javascript:void(0)" class="b-nav-item" onclick="handleBottomNav('cart', this)" style="position: relative;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+            <span class="b-nav-label">কার্ট</span>
+            <span id="mobileCartBadgeCount" style="position: absolute; top: 2px; right: 22%; background: #DC2626; color: #FFF; font-size: 9px; width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">0</span>
+        </a>
+        <a href="javascript:void(0)" class="b-nav-item" onclick="handleBottomNav('contact', this)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span class="b-nav-label">প্রোফাইল</span>
+        </a>
+    </nav>
+
+    <!-- ছবির হুবহু পূর্ণাঙ্গ প্রোফাইল ও অথেন্টিকেশন পেজ স্ক্রিন -->
+    <div id="profilePageView" class="app-page-view" style="display: none;">
+        <div class="container profile-page-container">
+
+            <!-- ১. অবস্থা: লগইন না থাকলে (SVG আইকন সহ স্লিম ও ক্লিন লগইন/রেজিস্ট্রেশন) -->
+            <div id="authScreenArea">
+                
+                <!-- স্লিম লগইন ভিউ -->
+                <div id="authLoginView" class="auth-full-screen-card">
+                    <div class="auth-form-card" style="padding: 24px 20px;">
+                        <h3 class="auth-card-title">লগইন করুন</h3>
+                        <p class="auth-card-sub" style="margin-bottom: 16px;">আপনার একাউন্টে প্রবেশ করুন</p>
+
+                        <form id="customerLoginForm" onsubmit="handleCustomerLogin(event)">
+                            <div class="auth-input-pill-box">
+                                <span class="auth-f-icon" style="display:flex; align-items:center;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                                </span>
+                                <div class="auth-f-input">
+                                    <label>ইমেইল এড্রেস</label>
+                                    <input type="email" id="loginEmail" placeholder="yourname@gmail.com" required>
+                                </div>
+                            </div>
+
+                            <div class="auth-input-pill-box">
+                                <span class="auth-f-icon" style="display:flex; align-items:center;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                </span>
+                                <div class="auth-f-input">
+                                    <label>পাসওয়ার্ড</label>
+                                    <input type="password" id="loginPass" placeholder="আপনার পাসওয়ার্ড লিখুন" required>
+                                </div>
+                                <span class="auth-eye-btn" onclick="togglePassVisibility('loginPass', this)" style="display:flex; align-items:center;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </span>
+                            </div>
+
+                            <div class="auth-options-line">
+                                <label class="auth-chk-label">
+                                    <input type="checkbox" id="loginRememberMe" checked>
+                                    <span>আমাকে মনে রাখুন</span>
+                                </label>
+                                <a href="javascript:void(0)" onclick="handleForgotPassword()" class="auth-link-forgot">পাসওয়ার্ড ভুলে গেছেন?</a>
+                            </div>
+
+                            <button type="submit" class="btn-auth-action" id="loginSubmitBtn">
+                                <span>লগইন করুন</span>
+                                <span>→</span>
+                            </button>
+                        </form>
+
+                        <div class="auth-bottom-switch" style="margin-top: 20px;">
+                            <span>এখনো একাউন্ট নেই?</span>
+                            <a href="javascript:void(0)" onclick="toggleAuthScreens('register')">রেজিস্ট্রেশন করুন →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- স্লিম রেজিস্ট্রেশন ভিউ -->
+                <div id="authRegisterView" class="auth-full-screen-card" style="display: none;">
+                    <div class="auth-form-card" style="padding: 24px 20px;">
+                        <h3 class="auth-card-title">রেজিস্ট্রেশন করুন</h3>
+                        <p class="auth-card-sub" style="margin-bottom: 16px;">একাউন্ট তৈরি করে আমাদের পরিবারের অংশ হন</p>
+
+                        <form id="customerRegisterForm" onsubmit="handleCustomerRegister(event)">
+                            <div class="auth-input-pill-box">
+                                <span class="auth-f-icon" style="display:flex; align-items:center;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg>
+                                </span>
+                                <div class="auth-f-input">
+                                    <label>আপনার নাম</label>
+                                    <input type="text" id="regName" placeholder="নাম লিখুন" required>
+                                </div>
+                            </div>
+
+                            <div class="auth-input-pill-box">
+                                <span class="auth-f-icon" style="display:flex; align-items:center;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                                </span>
+                                <div class="auth-f-input">
+                                    <label>ইমেইল এড্রেস</label>
+                                    <input type="email" id="regEmail" placeholder="yourname@gmail.com" required>
+                                </div>
+                            </div>
+
+                            <div class="auth-input-pill-box">
+                                <span class="auth-f-icon" style="display:flex; align-items:center;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.4 19.4 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.2-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.8 2.1Z"/></svg>
+                                </span>
+                                <div class="auth-f-input">
+                                    <label>মোবাইল নম্বর</label>
+                                    <input type="tel" id="regPhone" placeholder="01XXXXXXXXX" required>
+                                </div>
+                            </div>
+
+                            <div class="auth-input-pill-box">
+                                <span class="auth-f-icon" style="display:flex; align-items:center;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                </span>
+                                <div class="auth-f-input">
+                                    <label>পাসওয়ার্ড</label>
+                                    <input type="password" id="regPass" placeholder="কমপক্ষে ৬ অক্ষর" required>
+                                </div>
+                                <span class="auth-eye-btn" onclick="togglePassVisibility('regPass', this)" style="display:flex; align-items:center;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </span>
+                            </div>
+
+                            <div class="auth-input-pill-box">
+                                <span class="auth-f-icon" style="display:flex; align-items:center;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                </span>
+                                <div class="auth-f-input">
+                                    <label>পাসওয়ার্ড নিশ্চিত করুন</label>
+                                    <input type="password" id="regConfirmPass" placeholder="আবার পাসওয়ার্ড লিখুন" required>
+                                </div>
+                                <span class="auth-eye-btn" onclick="togglePassVisibility('regConfirmPass', this)" style="display:flex; align-items:center;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </span>
+                            </div>
+
+                            <div class="auth-input-pill-box">
+                                <span class="auth-f-icon" style="display:flex; align-items:center;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                                </span>
+                                <div class="auth-f-input">
+                                    <label>ডেলিভারি ঠিকানা</label>
+                                    <input type="text" id="regAddress" placeholder="বাড়ি/রোড/এলাকা, জেলা" required>
+                                </div>
+                            </div>
+
+                            <div class="auth-options-line">
+                                <label class="auth-chk-label">
+                                    <input type="checkbox" id="regTermsCheck" required checked>
+                                    <span>আমি শর্তাবলী ও গোপনীয়তা নীতিতে সম্মত</span>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn-auth-action" id="regSubmitBtn">
+                                <span>রেজিস্ট্রেশন করুন</span>
+                                <span>→</span>
+                            </button>
+                        </form>
+
+                        <div class="auth-bottom-switch" style="margin-top: 20px;">
+                            <span>আগে থেকেই একাউন্ট আছে?</span>
+                            <a href="javascript:void(0)" onclick="toggleAuthScreens('login')">লগইন করুন →</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ২. অবস্থা: স্ক্রিনশটের হুবহু প্রিমিয়াম প্রোফাইল ড্যাশবোর্ড স্ক্রিন -->
+            <div id="profileDashboardArea" style="display: none;" class="rr-pixel-profile-screen">
+                
+                
+
+                <!-- ২. স্লিম কাস্টমার হিরো প্রোফাইল কার্ড -->
+                <div class="rr-user-hero-card" onclick="promptShowFullProfile()">
+                    <div class="rr-user-avatar-wrap" style="display: flex; align-items: center; justify-content: center; background: #D6EAD8;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#123C27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <div class="rr-user-meta-wrap">
+                        <div class="rr-user-name-line">
+                            <h3 id="uProfileName">মোঃ আব্দুল্লাহ</h3>
+                            <span class="rr-tag-verified">
+                                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                Verified
+                            </span>
+                        </div>
+                        <p class="rr-user-phone-line" id="uProfilePhone">📞 01712-345678</p>
+                        <p class="rr-user-addr-line" id="uProfileAddress">📍 ঢাকা, বাংলাদেশ</p>
+                    </div>
+                    <span class="rr-hero-right-arrow">›</span>
+                </div>
+
+                <!-- ৩. ৪টি স্ট্যাটাস মেট্রিক্স কার্ড -->
+                <div class="rr-stats-quad-card">
+                    <div class="rr-stat-col" onclick="navigateToScreen('orders')">
+                        <div class="rr-stat-ico">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#123C27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                        </div>
+                        <h4 class="rr-stat-val" id="uStatTotalOrders">5</h4>
+                        <p class="rr-stat-lbl">মোট অর্ডার</p>
+                    </div>
+
+                    <div class="rr-stat-col" onclick="navigateToScreen('favorites')">
+                        <div class="rr-stat-ico">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#123C27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                        </div>
+                        <h4 class="rr-stat-val" id="uStatFavCount">3</h4>
+                        <p class="rr-stat-lbl">পছন্দের পণ্য</p>
+                    </div>
+
+                    <div class="rr-stat-col" onclick="navigateToScreen('orders')">
+                        <div class="rr-stat-ico">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#123C27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                        </div>
+                        <h4 class="rr-stat-val" id="uStatTotalItems">০</h4>
+                        <p class="rr-stat-lbl">মোট পণ্য</p>
+                    </div>
+
+                    <div class="rr-stat-col" onclick="openRewardPointsModal()" title="পয়েন্টের বিস্তারিত জানতে ক্লিক করুন">
+                        <div class="rr-stat-ico">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                        </div>
+                        <h4 class="rr-stat-val" id="uStatRewardPoints" style="color: #D97706;">০</h4>
+                        <p class="rr-stat-lbl">রিওয়ার্ড পয়েন্ট</p>
+                    </div>
+                </div>
+
+                <!-- ৪. সেকশন: আমার তথ্য -->
+                <div class="rr-group-section">
+                    <div class="rr-group-header">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#123C27"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        <h3>আমার তথ্য</h3>
+                    </div>
+                    <div class="rr-menu-white-card">
+                        <div class="rr-menu-row-item" onclick="openEditProfileModal()">
+                            <div class="rr-menu-left">
+                                <div class="rr-icon-circle-bg">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#123C27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </div>
+                                <div class="rr-menu-text">
+                                    <h4>প্রোফাইল ও ঠিকানা পরিবর্তন</h4>
+                                    <p>নাম, মোবাইল নম্বর ও ডেলিভারি ঠিকানা আপডেট</p>
+                                </div>
+                            </div>
+                            <span class="rr-arrow-right">›</span>
+                        </div>
+
+                        <div class="rr-menu-row-item" onclick="openPasswordModal()">
+                            <div class="rr-menu-left">
+                                <div class="rr-icon-circle-bg">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#123C27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                </div>
+                                <div class="rr-menu-text">
+                                    <h4>পাসওয়ার্ড পরিবর্তন</h4>
+                                    <p>নতুন পাসওয়ার্ড সেট করুন</p>
+                                </div>
+                            </div>
+                            <span class="rr-arrow-right">›</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- আধুনিক কাস্টমার প্রোফাইল তথ্য এডিট মডাল (SVG আইকন সহ) -->
+                <div class="modal-overlay" id="editProfileModal">
+                    <div class="modal-card-v2 order-sheet-modal" style="max-width: 440px; padding: 22px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--card-border); padding-bottom: 12px;">
+                            <h3 style="font-size: 16px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>
+                                <span>প্রোফাইল তথ্য পরিবর্তন</span>
+                            </h3>
+                            <button type="button" class="m-sheet-close-btn" onclick="closeEditProfileModal()">✕</button>
+                        </div>
+
+                        <form id="editProfileForm" onsubmit="handleUpdateProfile(event)">
+                            <div class="cust-input-group" style="margin-bottom: 12px;">
+                                <label style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">আপনার পূর্ণ নাম</label>
+                                <input type="text" id="editCustName" style="width: 100%; padding: 10px 12px; border: 1px solid var(--card-border); border-radius: 12px; font-size: 13px; outline: none;" required>
+                            </div>
+
+                            <div class="cust-input-group" style="margin-bottom: 12px;">
+                                <label style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">মোবাইল নম্বর</label>
+                                <input type="tel" id="editCustPhone" style="width: 100%; padding: 10px 12px; border: 1px solid var(--card-border); border-radius: 12px; font-size: 13px; outline: none;" required>
+                            </div>
+
+                            <div class="cust-input-group" style="margin-bottom: 16px;">
+                                <label style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">ডেলিভারি ঠিকানা</label>
+                                <textarea id="editCustAddress" rows="2" style="width: 100%; padding: 10px 12px; border: 1px solid var(--card-border); border-radius: 12px; font-size: 13px; outline: none; resize: none;" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-confirm-sheet-order" id="btnUpdateCustProfile" style="width: 100%; padding: 12px; border-radius: 20px; font-size: 13.5px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h12l4 4v14H3V3h2Z"/><path d="M7 3v6h10V3"/><path d="M7 21v-8h10v8"/></svg>
+                                <span>তথ্য সংরক্ষণ করুন</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- আধুনিক পাসওয়ার্ড পরিবর্তন মডাল (SVG আইকন সহ) -->
+                <div class="modal-overlay" id="passwordModal">
+                    <div class="modal-card-v2 order-sheet-modal" style="max-width: 440px; padding: 22px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--card-border); padding-bottom: 12px;">
+                            <h3 style="font-size: 16px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                <span>পাসওয়ার্ড পরিবর্তন</span>
+                            </h3>
+                            <button type="button" class="m-sheet-close-btn" onclick="closePasswordModal()">✕</button>
+                        </div>
+
+                        <form id="changePasswordForm" onsubmit="handleUpdatePassword(event)">
+                            <div class="cust-input-group" style="margin-bottom: 12px;">
+                                <label style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">বর্তমান পাসওয়ার্ড</label>
+                                <div style="position: relative; display: flex; align-items: center;">
+                                    <input type="password" id="currCustPass" style="width: 100%; padding: 10px 38px 10px 12px; border: 1px solid var(--card-border); border-radius: 12px; font-size: 13px; outline: none;" placeholder="বর্তমান পাসওয়ার্ডটি লিখুন" required>
+                                    <span onclick="togglePassVisibility('currCustPass', this)" style="position: absolute; right: 12px; cursor: pointer; user-select: none; display: flex; align-items: center;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="cust-input-group" style="margin-bottom: 12px;">
+                                <label style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">নতুন পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)</label>
+                                <div style="position: relative; display: flex; align-items: center;">
+                                    <input type="password" id="newCustPass" style="width: 100%; padding: 10px 38px 10px 12px; border: 1px solid var(--card-border); border-radius: 12px; font-size: 13px; outline: none;" placeholder="নতুন পাসওয়ার্ড লিখুন" required>
+                                    <span onclick="togglePassVisibility('newCustPass', this)" style="position: absolute; right: 12px; cursor: pointer; user-select: none; display: flex; align-items: center;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="cust-input-group" style="margin-bottom: 16px;">
+                                <label style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">নতুন পাসওয়ার্ড নিশ্চিত করুন</label>
+                                <div style="position: relative; display: flex; align-items: center;">
+                                    <input type="password" id="confirmCustPass" style="width: 100%; padding: 10px 38px 10px 12px; border: 1px solid var(--card-border); border-radius: 12px; font-size: 13px; outline: none;" placeholder="আবার নতুন পাসওয়ার্ড লিখুন" required>
+                                    <span onclick="togglePassVisibility('confirmCustPass', this)" style="position: absolute; right: 12px; cursor: pointer; user-select: none; display: flex; align-items: center;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-confirm-sheet-order" id="btnUpdatePass" style="width: 100%; padding: 12px; border-radius: 20px; font-size: 13.5px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="5"/><path d="m11.5 11.5 9-9"/><path d="M17 6l3 3"/><path d="M14 9l3 3"/></svg>
+                                <span>পাসওয়ার্ড আপডেট করুন</span>
+                            </button>
+
+                            <div style="text-align: center;">
+                                <a href="javascript:void(0)" onclick="sendResetEmailLink()" style="font-size: 11.5px; color: var(--primary); font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                                    <span>পাসওয়ার্ড মনে নেই? ইমেইলে রিসেট লিংক পাঠান</span>
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                
+
+                <!-- ৫. সেকশন: অ্যাকাউন্ট ব্যবস্থাপনা -->
+                <div class="rr-group-section">
+                    <div class="rr-group-header">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#123C27"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                        <h3>অ্যাকাউন্ট ব্যবস্থাপনা</h3>
+                    </div>
+                    <div class="rr-menu-white-card">
+                        <div class="rr-menu-row-item" onclick="navigateToScreen('orders')">
+                            <div class="rr-menu-left">
+                                <div class="rr-icon-circle-bg">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#123C27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                                </div>
+                                <div class="rr-menu-text">
+                                    <h4>আমার অর্ডারসমূহ</h4>
+                                    <p>সকল অর্ডার দেখুন ও ট্র্যাক করুন</p>
+                                </div>
+                            </div>
+                            <span class="rr-arrow-right">›</span>
+                        </div>
+
+                        <div class="rr-menu-row-item" onclick="navigateToScreen('favorites')">
+                            <div class="rr-menu-left">
+                                <div class="rr-icon-circle-bg">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#123C27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                                </div>
+                                <div class="rr-menu-text">
+                                    <h4>পছন্দের পণ্য (Favorites)</h4>
+                                    <p>আপনার সেভ করা পণ্যগুলো</p>
+                                </div>
+                            </div>
+                            <span class="rr-arrow-right">›</span>
+                        </div>
+
+                        <div class="rr-menu-row-item" onclick="openContactWhatsApp()">
+                            <div class="rr-menu-left">
+                                <div class="rr-icon-circle-bg">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#123C27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                                </div>
+                                <div class="rr-menu-text">
+                                    <h4>সহায়তা ও যোগাযোগ</h4>
+                                    <p>আমাদের সাথে যোগাযোগ করুন</p>
+                                </div>
+                            </div>
+                            <span class="rr-arrow-right">›</span>
+                        </div>
+
+                        <div class="rr-menu-row-item" onclick="handleCustomerLogout()">
+                            <div class="rr-menu-left">
+                                <div class="rr-icon-circle-bg" style="background:#FEE2E2;">
+                                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                                </div>
+                                <div class="rr-menu-text">
+                                    <h4 style="color:#DC2626;">লগআউট করুন</h4>
+                                    <p>অ্যাকাউন্ট থেকে প্রস্থান করুন</p>
+                                </div>
+                            </div>
+                            <span class="rr-arrow-right" style="color:#DC2626;">›</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="#" id="floatingWaBtn" target="_blank" class="floating-whatsapp" title="WhatsApp এ যোগাযোগ করুন">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/>
+        </svg>
+    </a>
+
+    <!-- চারপাশের লেখা মাঝখানে সাজানো আধুনিক প্রিমিয়াম ফুটার -->
+    <footer class="main-footer" id="contact">
+        <div class="container footer-content-grid">
+            <!-- ব্র্যান্ড পরিচিতি -->
+            <div class="footer-col brand-col">
+                <div class="footer-brand">
+                    <span class="leaf" style="display:inline-flex; align-items:center; color:#4ADE80;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13C4 5 14 3 21 3c0 7-2 17-10 17Z"/><path d="M8 16c3-3 6-5 11-9"/></svg>
+                    </span>
+                    <h3 class="serif">ঋতুবীজ</h3>
+                </div>
+                <p class="footer-about">
+                    বাংলার মাটি থেকে আপনার ঘরে, খাঁটি স্বাদের নিশ্চয়তা নিয়ে পৌঁছে দেয় ঋতুবীজ।
+                </p>
+            </div>
+
+            <!-- যোগাযোগের তথ্য (মাঝখানে বিন্যস্ত) -->
+            <div class="footer-col">
+                <h4 class="footer-col-title">যোগাযোগ</h4>
+                <div class="footer-contact-list">
+                    <p id="footerPhone">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.4 19.4 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.2-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.8 2.1Z"/></svg>
+                        <span>ফোন: ০১৭৮৩২০০৫৯০</span>
+                    </p>
+                    <p id="footerEmail">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                        <span>ইমেইল: info@ritubij.com</span>
+                    </p>
+                    <p id="footerAddress">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                        <span>ঠিকানা: রাজশাহী, বাংলাদেশ</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- খাঁটি ভালোবাসা ব্যাজ -->
+            <div class="footer-col badge-col">
+                <div class="footer-badge-box">
+                    <p class="badge-sub">দেশি স্বাদ,</p>
+                    <h3 class="badge-main serif">খাঁটি ভালোবাসা</h3>
+                    <span class="badge-leaf-dec" style="display:inline-flex; align-items:center; justify-content:center; color:#F59E0B; margin-top:4px;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22V3"/><path d="M12 7c-3 0-5-2-5-5 3 0 5 2 5 5Z"/><path d="M12 11c-3 0-5-2-5-5 3 0 5 2 5 5Z"/><path d="M12 15c-3 0-5-2-5-5 3 0 5 2 5 5Z"/><path d="M12 9c3 0 5-2 5-5-3 0-5 2-5 5Z"/><path d="M12 13c3 0 5-2 5-5-3 0-5 2-5 5Z"/><path d="M12 17c3 0 5-2 5-5-3 0-5 2-5 5Z"/></svg>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom-line">
+            <p>© ২০২৬ ঋতুবীজ। আন্তরিক স্বাস্থ্য ও খাঁটি স্বাদ নিশ্চিতকরণে তৎপর।</p>
+        </div>
+    </footer> 
+
+    <!-- ছবির হুবহু আধুনিক অর্ডার বিস্তারিত বিবরণী মডাল (১০০% সচল ও বাটন ফিক্সড) -->
+    <div class="modal-overlay" id="orderDetailModal" onclick="if(event.target === this) closeOrderDetailModal()" style="position: fixed !important; inset: 0 !important; z-index: 999999 !important; background: rgba(0,0,0,0.65) !important; display: none; align-items: center; justify-content: center; padding: 14px;">
+        <div class="modal-card-v2 order-sheet-modal" style="max-width: 480px; width: 100%; padding: 16px 20px 20px; margin: auto; max-height: 92vh; overflow-y: auto; border-radius: 24px; background: #FFFFFF; box-shadow: 0 20px 40px rgba(0,0,0,0.18); position: relative;">
+            
+            <!-- স্টিকি টপ হেডার (স্ক্রল করলেও ✕ বাটন সবসময় সামনে থাকবে) -->
+            <div style="display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: #FFFFFF; z-index: 10; padding: 4px 0 10px; border-bottom: 1.5px solid #F1F5F2; margin-bottom: 12px;">
+                <h3 style="font-size: 17.5px; font-weight: 800; color: #0F3826; display: flex; align-items: center; gap: 8px; letter-spacing: -0.3px; margin: 0;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0F3826" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 8 9 5 9-5"/><path d="M3 8v9l9 5 9-5V8"/><path d="M12 13v9"/></svg>
+                    <span>অর্ডারের বিস্তারিত বিবরণ</span>
+                </h3>
+                <button type="button" onclick="closeOrderDetailModal()" style="width: 32px; height: 32px; border-radius: 50%; background: #EDF6EE; border: 1px solid #D5EBD9; color: #15803D; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+            </div>
+            
+            <!-- ভেতরের সব কার্ড ডাইনামিকভাবে জাভাস্ক্রিপ্ট থেকে বসবে -->
+            <div id="orderDetailContent"></div>
+
+            <!-- ফুল-উইডথ বন্ধ করুন বাটন -->
+            <button type="button" onclick="closeOrderDetailModal()" style="margin-top: 14px; padding: 13px; border-radius: 25px; background: #0E3E28; font-size: 14.5px; font-weight: 700; width: 100%; border: none; color: #FFF; cursor: pointer; display: block; text-align: center;">
+                <span>বন্ধ করুন</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- আমাদের গল্প ও প্রাইভেসি পলিসি প্রদর্শনের প্রিমিয়াম মডাল -->
+    <div class="modal-overlay" id="siteInfoModal" onclick="if(event.target === this) closeSiteInfoModal()" style="position: fixed !important; inset: 0 !important; z-index: 999999 !important; background: rgba(0,0,0,0.6) !important; display: none; align-items: center; justify-content: center; padding: 14px;">
+        <div class="modal-card-v2" style="max-width: 480px; width: 100%; padding: 18px 20px; border-radius: 20px; background: #FFFFFF; box-shadow: 0 16px 36px rgba(0,0,0,0.18); position: relative; max-height: 85vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1.5px solid #F1F5F2; margin-bottom: 12px;">
+                <h3 id="infoModalTitle" style="font-size: 16px; font-weight: 800; color: #0F3826; display: flex; align-items: center; gap: 6px; margin: 0;">
+                    <span>আমাদের গল্প</span>
+                </h3>
+                <button type="button" onclick="closeSiteInfoModal()" style="width: 28px; height: 28px; border-radius: 50%; background: #EDF6EE; border: 1px solid #D5EBD9; color: #15803D; font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+            </div>
+            
+            <div id="infoModalContent" style="font-size: 13px; color: #374151; line-height: 1.7;"></div>
+
+            <button type="button" onclick="closeSiteInfoModal()" style="margin-top: 14px; padding: 10px; border-radius: 20px; background: #0E3E28; font-size: 13.5px; font-weight: 700; width: 100%; border: none; color: #FFF; cursor: pointer;">
+                <span>ঠিক আছে</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- রিওয়ার্ড পয়েন্ট বিস্তারিত বিবরণী মডাল -->
+    <div class="modal-overlay" id="rewardPointsModal" onclick="if(event.target === this) closeRewardPointsModal()" style="position: fixed !important; inset: 0 !important; z-index: 999999 !important; background: rgba(0,0,0,0.6) !important; display: none; align-items: center; justify-content: center; padding: 14px;">
+        <div class="modal-card-v2" style="max-width: 440px; width: 100%; padding: 18px 20px; border-radius: 20px; background: #FFFFFF; box-shadow: 0 16px 36px rgba(0,0,0,0.18); position: relative; text-align: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #F1F5F2; margin-bottom: 12px;">
+                <h3 style="font-size: 15px; font-weight: 800; color: #0F3826; display: flex; align-items: center; gap: 6px; margin: 0;">
+                    <span>🎁 রিওয়ার্ড পয়েন্ট নীতি</span>
+                </h3>
+                <button type="button" onclick="closeRewardPointsModal()" style="width: 28px; height: 28px; border-radius: 50%; background: #EDF6EE; border: 1px solid #D5EBD9; color: #15803D; font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+            </div>
+            
+            <!-- পয়েন্ট হাইলাইট কার্ড -->
+            <div style="background: #FEF8ED; border: 1.5px solid #FDE68A; border-radius: 16px; padding: 14px; margin-bottom: 12px;">
+                <span style="font-size: 11px; color: #92400E; font-weight: 700; display: block; margin-bottom: 2px;">আপনার মোট অর্জিত পয়েন্ট</span>
+                <span id="modalRewardPointsVal" style="font-size: 26px; font-weight: 800; color: #B45309; line-height: 1.2;">০</span>
+                <small style="font-size: 11px; color: #B45309; display: block; margin-top: 2px;">পয়েন্ট ব্যালান্স</small>
+            </div>
+
+            <!-- নিয়মাবলী -->
+            <div style="text-align: left; font-size: 12px; color: #374151; line-height: 1.6; background: #F9FBFA; border: 1px solid #EBF0EC; border-radius: 14px; padding: 10px 12px; margin-bottom: 14px;">
+                <p style="margin-bottom: 6px;">✨ <strong>পয়েন্ট অর্জন:</strong> ঋতুবীজ থেকে প্রতি <strong>১০ টাকার</strong> কেনাকাটায় আপনি পাবেন <strong>১টি</strong> রিওয়ার্ড পয়েন্ট।</p>
+                <p style="margin-bottom: 6px;">🎯 <strong>পয়েন্টের মূল্য:</strong> প্রতি ১০০ পয়েন্ট সমান ১০ টাকা ক্যাশব্যাক ডিসকাউন্ট হিসেবে ব্যবহারযোগ্য।</p>
+                <p style="margin: 0;">📦 <strong>ব্যবহার পদ্ধতি:</strong> অর্ডার ডেলিভারি সম্পন্ন হওয়ার পরই স্বয়ংক্রিয়ভাবে পয়েন্ট অ্যাকাউন্টে যুক্ত হয়।</p>
+            </div>
+
+            <button type="button" onclick="closeRewardPointsModal()" style="padding: 10px; border-radius: 20px; background: #0E3E28; font-size: 13.5px; font-weight: 700; width: 100%; border: none; color: #FFF; cursor: pointer;">
+                <span>বুঝেছি</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- প্রিমিয়াম ফ্লোটিং টোস্ট নোটিফিকেশন বক্স -->
+    <div id="toastNotification" class="custom-toast-box"></div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

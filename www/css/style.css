@@ -1,0 +1,2628 @@
+:root {
+    --bg-body: #FDFCF9;
+    --primary: #0F3826;
+    --primary-hover: #092619;
+    --accent-gold: #C27803;
+    --accent-soft: #FDF6E2;
+    --card-border: #E8E4DC;
+    --text-main: #1C241F;
+    --text-muted: #64746B;
+    --white: #FFFFFF;
+    --shadow-sm: 0 2px 8px rgba(15, 56, 38, 0.04);
+    --shadow-md: 0 8px 24px rgba(15, 56, 38, 0.08);
+}
+
+/* স্পষ্ট ও খাঁটি বাংলা ফন্ট ফ্যামিলি */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Hind Siliguri', 'Noto Sans Bengali', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body, button, input, select, textarea, span, p, h1, h2, h3, h4, h5, h6 {
+    font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif !important;
+}
+
+/* ৬০ FPS সুপার-স্মুথ স্ক্রলিং ও GPU ইঞ্জিন সক্রিয়করণ */
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+}
+
+/* প্রিমিয়াম স্ক্রল রিভিল এনিমেশন (৬০ FPS হার্ডওয়্যার এক্সিলারেটেড) */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+    transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+    backface-visibility: hidden;
+}
+
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+/* অ্যাক্সেসিবিলিটি সেফটি */
+@media (prefers-reduced-motion: reduce) {
+    .reveal-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+/* অফ-স্ক্রিন উপাদান ব্যাকগ্রাউন্ডে ক্যালকুলেশন বন্ধ করে ৬০ FPS ধরে রাখা */
+.prod-card-v2, .metric-trust-card, .order-item-card-photo {
+    content-visibility: auto;
+    contain-intrinsic-size: 250px;
+}
+
+/* মূল্য ও বাংলা সংখ্যার জন্য বিশেষ স্পষ্ট স্টাইল */
+.price-val, .o-price-bold, .final-price-text, #sumTotalPrice, #cartTotalPrice, #detProdPrice {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.2px;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+/* --- ১. প্রিমিয়াম টপ নোটিশ বার (ডান থেকে বাঁয়ে স্ক্রলিং এনিমেশন) --- */
+.top-notice-bar {
+    background: #0B291C;
+    color: #E2ECE6;
+    font-size: 12.5px;
+    padding: 6px 0;
+    font-weight: 500;
+    overflow: hidden;
+}
+
+.top-notice-inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.notice-badge {
+    background: #C27803;
+    color: #FFF;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+    z-index: 2;
+}
+
+/* স্ক্রলিং কন্টেইনার */
+.notice-marquee-wrap {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* GPU হার্ডওয়্যার এক্সিলারেটেড সুপার-স্মুথ এনিমেশন */
+.notice-marquee-content {
+    display: inline-block;
+    white-space: nowrap;
+    padding-left: 100%;
+    /* জিপিইউ এক্সিলারেশন (বেঁধে যাওয়া ও কাঁপা সম্পূর্ণ বন্ধের জন্য) */
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    animation: topNoticeScroll 25s linear infinite;
+    cursor: default;
+}
+
+/* মাউস বা আঙুল রাখলে লেখা থেমে যাবে যাতে সহজে পড়া যায় */
+.notice-marquee-wrap:hover .notice-marquee-content,
+.notice-marquee-wrap:active .notice-marquee-content {
+    animation-play-state: paused;
+}
+
+/* হার্ডওয়্যার বেসড স্মুথ ট্রানজিশন */
+@keyframes topNoticeScroll {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+.notice-close-btn {
+    background: none;
+    border: none;
+    color: #8EAA9C;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0 4px;
+    flex-shrink: 0;
+    z-index: 2;
+    transition: color 0.2s;
+}
+
+.notice-close-btn:hover {
+    color: #FFF;
+}
+
+/* --- ২. আধুনিক প্রিমিয়াম হেডার (৬০ FPS স্ক্রলিং অপ্টিমাইজড) --- */
+.main-header {
+    position: sticky;
+    top: 0;
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--card-border);
+    z-index: 99;
+    padding: 10px 0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+}
+
+.brand-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.brand-icon-box {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #E8F3ED;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand-text-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-en-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1.1;
+    letter-spacing: -0.2px;
+}
+
+.brand-bn-subtitle {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+/* হেডার গোলাকার বাটনসমূহ (সার্চ ও প্রোফাইল হুবহু একই গোল সাইজ) */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-circle-act {
+    width: 38px;
+    height: 38px;
+    border-radius: 50% !important;
+    background: #FFFFFF;
+    border: 1px solid var(--card-border);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.btn-circle-act:hover {
+    background: #F4F6F4;
+    border-color: #D1DAD4;
+    transform: scale(1.05);
+}
+
+.btn-circle-act svg {
+    color: var(--primary);
+}
+
+/* হেডারের নিজস্ব ইনলাইন সার্চ বার (ব্যানারকে এক চুলও স্পর্শ করবে না) */
+.header-inline-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #FDFCF9;
+    border: 1px solid #D1DAD4;
+    border-radius: 25px;
+    padding: 5px 12px;
+    flex: 1;
+    max-width: 420px;
+    margin: 0 10px;
+    animation: searchFadeIn 0.2s ease-out;
+}
+
+@keyframes searchFadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.header-inline-search-bar input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 12.5px;
+    color: var(--text-main);
+    background: transparent;
+    font-family: inherit;
+}
+
+.btn-close-search {
+    background: none;
+    border: none;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 580px) {
+    /* ছোট মোবাইলে যখন সার্চ ওপেন হবে, তখন ব্র্যান্ড টেক্সট সাময়িক হাইড হয়ে পুরোটা ইনপুট নেবে */
+    .search-open-mobile #headerBrandArea .brand-text-block {
+        display: none;
+    }
+    .header-inline-search-bar {
+        margin: 0 6px;
+    }
+}
+
+/* --- হিরো ব্যানার স্লাইডার (স্লিম ও সুষম মার্জিন) --- */
+.hero-banner-wrapper {
+    margin: 10px 0 18px; /* সার্চ বার ও ব্যানারের অতিরিক্ত ফাঁকা দূরত্ব কমানো হয়েছে */
+    width: 100%;
+}
+
+.hero-slider-box {
+    display: block;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    background: #ECE9E2;
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow-md);
+    aspect-ratio: 2.2 / 1;
+    text-decoration: none;
+}
+
+@media (max-width: 640px) {
+    .hero-slider-box {
+        border-radius: 16px;
+        aspect-ratio: 2 / 1;
+    }
+}
+
+.slider-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+    touch-action: pan-y;
+}
+
+.slide-item {
+    min-width: 100%;
+    height: 100%;
+}
+
+.slide-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.slider-dots {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 10;
+}
+
+.dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.dot.active {
+    width: 22px;
+    border-radius: 10px;
+    background: var(--primary);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* --- ৪টি ট্রাস্ট ফিচার ব্যাজ --- */
+.trust-cards-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 36px;
+}
+
+@media (min-width: 768px) {
+    .trust-cards-row {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+    }
+}
+
+.trust-pill-box {
+    background: #FFFFFF;
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.trust-pill-box:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.trust-icon-leaf {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #EAF4EE;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.trust-text-block h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.2;
+    margin-bottom: 1px;
+}
+
+.trust-text-block p {
+    font-size: 10.5px;
+    color: var(--text-muted);
+}
+
+/* --- পণ্য সম্ভার সেকশন ও ক্যাটাগরি পিলস --- */
+.products-section {
+    margin-bottom: 48px;
+}
+
+.section-title-wrap {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.section-tag-pill {
+    background: #E8F3ED;
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 6px;
+}
+
+.section-main-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+.section-subtext {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.tab-box-modern {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 22px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px 0;
+}
+
+.tab-box-modern::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-btn-pill {
+    background: #FFFFFF;
+    border: 1px solid var(--card-border);
+    padding: 7px 18px;
+    border-radius: 22px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    outline: none !important; /* ব্রাউজারের নিজস্ব নীল/কালো আলোর দাগ বন্ধ */
+    -webkit-tap-highlight-color: transparent;
+}
+
+.tab-btn-pill:focus,
+.tab-btn-pill:focus-visible,
+.tab-btn-pill:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.tab-btn-pill.active {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+    box-shadow: none !important; /* ঘোলাটে আলোর মতো শ্যাডো সম্পূর্ণ বন্ধ */
+    outline: none !important;
+}
+
+/* --- আধুনিক প্রিমিয়াম প্রোডাক্ট কার্ড গ্রিড --- */
+.product-cards-grid-v2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+@media (min-width: 768px) {
+    .product-cards-grid-v2 {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+    }
+}
+
+/* --- ছবির হুবহু প্রিমিয়াম প্রোডাক্ট কার্ড ডিজাইন --- */
+.prod-card-v2 {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    transition: transform 0.15s ease-out;
+    backface-visibility: hidden;
+}
+
+.prod-card-v2:active {
+    transform: scale(0.98);
+}
+
+/* ছবির আকার বড় ও আকর্ষণীয় করার জন্য */
+.prod-img-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1; /* স্কয়ার বা বড় আকারের ছবি */
+    background: #F3F4F6;
+    overflow: hidden;
+}
+
+.prod-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+/* ডিসকাউন্ট প্রাইসিং ট্যাগ স্টাইল */
+.price-old-val {
+    font-size: 13px;
+    color: #9CA3AF;
+    text-decoration: line-through;
+    font-weight: 600;
+    margin-left: 4px;
+}
+
+.save-badge-pill {
+    background: #FDE68A;
+    color: #92400E;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-left: auto;
+}
+
+.prod-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.prod-card-v2:hover .prod-img-box img {
+    transform: scale(1.06);
+}
+
+.badge-seasonal-top {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #0E3E28;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 16px;
+    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.badge-seasonal-top.out {
+    background: #64748B;
+}
+
+.btn-fav-heart {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #DC2626;
+    cursor: pointer;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    transition: transform 0.2s ease;
+}
+
+.btn-fav-heart:hover {
+    transform: scale(1.12);
+}
+
+.btn-fav-heart.active svg {
+    fill: #DC2626;
+}
+
+/* কমপ্যাক্ট ও প্রিমিয়াম প্রোডাক্ট কার্ড কন্টেন্ট */
+.prod-card-content {
+    padding: 8px 10px 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.prod-card-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1.2;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.prod-origin-tag {
+    font-size: 11px;
+    color: #4B5563;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-bottom: 3px;
+    font-weight: 500;
+}
+
+.prod-origin-tag svg {
+    color: #854D0E;
+}
+
+.prod-price-block {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+
+.price-val {
+    font-size: 15px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.price-unit {
+    font-size: 11px;
+    color: #6B7280;
+    font-weight: 500;
+}
+
+.btn-card-order-full {
+    width: 100%;
+    background: #0E3E28;
+    color: #FFFFFF;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 18px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(14, 62, 40, 0.15);
+    margin-top: 0;
+}
+
+.btn-card-order-full:hover {
+    background: #082618;
+    box-shadow: 0 4px 12px rgba(14, 62, 40, 0.35);
+}
+
+.btn-card-order-full.disabled {
+    background: #CBD5E1;
+    color: #64748B;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* --- ছবির হুবহু ট্রাস্ট কার্ড স্টাইলের কাউন্টার মেট্রিক্স --- */
+.metrics-trust-style-section {
+    margin: 24px 0 32px;
+}
+
+.metrics-trust-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+@media (min-width: 768px) {
+    .metrics-trust-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+    }
+}
+
+.metric-trust-card {
+    background: #FFFFFF;
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-trust-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.metric-trust-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #EAF4EE;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.metric-trust-text {
+    line-height: 1.25;
+}
+
+.metric-trust-text h4 {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 2px;
+}
+
+.metric-trust-text p {
+    font-size: 10.5px;
+    color: var(--text-muted);
+}
+
+/* --- গ্রাহকদের ভালোবাসা (ছবির হুবহু কমপ্যাক্ট ডিজাইন) --- */
+.reviews-section-wrap {
+    margin: 28px 0 45px;
+    position: relative;
+}
+
+.rev-title-row {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 2px;
+}
+
+.rev-title-row .leaf-decor {
+    display: inline-flex;
+    align-items: center;
+    opacity: 0.8;
+}
+
+.btn-write-review-v2 {
+    margin-top: 6px;
+    background: #EDF6EE;
+    color: var(--primary);
+    border: 1.5px solid #C4DFC9;
+    padding: 6px 18px;
+    border-radius: 25px;
+    font-size: 12.5px;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+}
+
+/* ছবির মতো পাশাপাশি কমপ্যাক্ট কার্ড (মোবাইলে মসৃণ স্ক্রল, কম্পিউটারে ৩ কলাম) */
+.reviews-modern-grid {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding: 10px 4px 16px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.reviews-modern-grid::-webkit-scrollbar {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .reviews-modern-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        overflow-x: visible;
+    }
+}
+
+/* ছবির হুবহু নিটোল কার্ড (অতিরিক্ত বড় হওয়া সম্পূর্ণ বন্ধ) */
+.review-card-modern {
+    background: #FFFFFF;
+    border: 1.5px solid #EBF0EC;
+    border-radius: 20px;
+    padding: 16px 14px 12px;
+    box-shadow: 0 3px 12px rgba(15, 56, 38, 0.03);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 260px;
+    max-width: 275px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+@media (min-width: 768px) {
+    .review-card-modern {
+        min-width: auto;
+        max-width: none;
+    }
+}
+
+.rev-card-top-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.rev-avatar-circle-v2 {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #E8F3EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1.5px solid #D2E7D7;
+}
+
+.rev-avatar-circle-v2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rev-meta-names h4 {
+    font-size: 14px;
+    font-weight: 800;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    line-height: 1.2;
+    margin-bottom: 2px;
+}
+
+.rev-verified-tick {
+    display: inline-flex;
+    align-items: center;
+    color: #16A34A;
+}
+
+.rev-location-line {
+    font-size: 11px;
+    color: #64748B;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+/* ছবির হুবহু হালকা হলুদ রেটিং ক্যাপসুল ব্যাজ */
+.rev-stars-pill-box {
+    background: #FEF7EA;
+    border-radius: 10px;
+    padding: 3px 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+    align-self: flex-start;
+}
+
+.rev-stars-list {
+    display: inline-flex;
+    gap: 2px;
+    color: #F59E0B;
+}
+
+.rev-score-text {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: #1F2937;
+}
+
+.rev-date-meta {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10.5px;
+    color: #64748B;
+    margin-bottom: 8px;
+}
+
+.rev-quote-symbol {
+    font-size: 20px;
+    line-height: 1;
+    color: #2D7A4D;
+    font-family: 'Playfair Display', serif;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.review-text-v2 {
+    font-size: 12.5px;
+    color: #334155;
+    line-height: 1.55;
+    margin-bottom: 12px;
+    flex-grow: 1;
+}
+
+/* নিচের লিফ ট্যাগ ও হালকা কোটেশন */
+.rev-card-bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 8px;
+    border-top: 1px dashed #E5E7EB;
+}
+
+.rev-leaf-tag-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #EEF7F0;
+    border-radius: 16px;
+    padding: 2px 8px;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #15803D;
+}
+
+.rev-bottom-quote-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: #D3E6D8;
+    line-height: 0.5;
+}
+
+/* --- আধুনিক ও স্লিম প্রিমিয়াম ফুটার (কমপ্যাক্ট ও ব্যালান্সড স্পেসিং) --- */
+.main-footer {
+    background: #081F15;
+    color: #CBD5E1;
+    padding: 24px 14px 14px;
+}
+
+.footer-content-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px; /* সেকশনগুলোর মধ্যকার অপ্রয়োজনীয় দূরত্ব কমানো হয়েছে */
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .footer-content-grid {
+        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+        gap: 18px;
+        text-align: left;
+    }
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .footer-col {
+        align-items: flex-start;
+    }
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+@media (min-width: 768px) {
+    .footer-brand {
+        justify-content: flex-start;
+    }
+}
+
+.footer-brand .leaf {
+    color: #4ADE80;
+    font-size: 18px;
+}
+
+.footer-brand h3 {
+    font-size: 17px;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+
+.footer-about {
+    font-size: 11.5px;
+    color: #94A3B8;
+    line-height: 1.45;
+    max-width: 290px;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .footer-about {
+        margin: 0;
+        max-width: none;
+    }
+}
+
+.footer-col-title {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: 6px; /* টাইটেলের নিচের অতিরিক্ত ফাঁকা জায়গা কমানো হয়েছে */
+    letter-spacing: -0.2px;
+}
+
+.footer-contact-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px; /* যোগাযোগের লাইনগুলোর দূরত্ব কমানো হয়েছে */
+}
+
+@media (min-width: 768px) {
+    .footer-contact-list {
+        align-items: flex-start;
+    }
+}
+
+.footer-contact-list p {
+    font-size: 11.5px;
+    color: #94A3B8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    line-height: 1.3;
+}
+
+@media (min-width: 768px) {
+    .footer-contact-list p {
+        justify-content: flex-start;
+    }
+}
+
+.footer-contact-list svg {
+    color: #4ADE80;
+    flex-shrink: 0;
+}
+
+.footer-quick-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px; /* কুইক লিংকের মধ্যকার দূরত্ব কমানো হয়েছে */
+}
+
+@media (min-width: 768px) {
+    .footer-quick-links {
+        align-items: flex-start;
+    }
+}
+
+.footer-quick-links a {
+    color: #94A3B8;
+    text-decoration: none;
+    font-size: 11.5px;
+    transition: color 0.2s ease;
+    line-height: 1.3;
+}
+
+.footer-quick-links a:hover {
+    color: #FFFFFF;
+}
+
+.badge-col {
+    width: 100%;
+}
+
+.footer-badge-box {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 12px 10px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.03);
+    width: 100%;
+}
+
+.badge-sub {
+    font-size: 11px;
+    color: #FBBF24;
+}
+
+.badge-main {
+    font-size: 15px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 2px 0;
+}
+
+.footer-bottom-line {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 16px;
+    padding-top: 10px;
+    text-align: center;
+    font-size: 10.5px;
+    color: #64748B;
+}
+
+/* --- ফ্লোটিং হোয়াটসঅ্যাপ বাটন --- */
+.floating-whatsapp {
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    background: #25D366;
+    color: #FFFFFF;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
+    z-index: 90;
+    text-decoration: none;
+    font-size: 26px;
+    transition: transform 0.2s ease;
+}
+
+.floating-whatsapp:hover {
+    transform: scale(1.08);
+}
+
+/* --- মোবাইল বটম ন্যাভ বার --- */
+.mobile-bottom-nav {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    body {
+        padding-bottom: 70px;
+    }
+
+    .mobile-bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: #FFFFFF;
+        border-top: 1px solid var(--card-border);
+        justify-content: space-around;
+        align-items: center;
+        z-index: 900;
+        box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
+    }
+
+    .b-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--text-muted);
+        flex: 1;
+        gap: 3px;
+    }
+
+    .b-nav-label {
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .b-nav-item.active {
+        color: var(--primary);
+    }
+
+    .floating-whatsapp {
+        bottom: 74px !important;
+        right: 16px !important;
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 22px !important;
+    }
+}
+
+/* --- আধুনিক মডাল ও শিট ওভারলে --- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 30, 22, 0.65);
+    backdrop-filter: blur(6px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    padding: 16px;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-card-v2 {
+    background: #FFFFFF;
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    position: relative;
+    animation: modalScaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalScaleUp {
+    from { transform: scale(0.95) translateY(10px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.order-sheet-modal {
+    padding: 20px;
+    max-height: 92vh;
+    overflow-y: auto;
+}
+
+@media (max-width: 640px) {
+    .modal-overlay {
+        align-items: flex-end;
+        padding: 0;
+    }
+    .order-sheet-modal {
+        border-radius: 24px 24px 0 0;
+        max-height: 88vh;
+        animation: sheetSlideUp 0.25s ease-out;
+    }
+    @keyframes sheetSlideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+    }
+}
+
+/* নির্বাচিত পণ্যের হেডার */
+.m-prod-top-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--card-border);
+    margin-bottom: 16px;
+}
+
+.m-prod-thumb-img {
+    width: 72px;
+    height: 72px;
+    border-radius: 14px;
+    object-fit: cover;
+    background: #F4F6F4;
+}
+
+.m-prod-header-info {
+    flex: 1;
+}
+
+.m-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 3px;
+}
+
+.m-prod-seasonal-badge {
+    background: #E8F3ED;
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 6px;
+}
+
+.m-prod-loc {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.m-prod-header-info h3 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1.2;
+    margin-bottom: 2px;
+}
+
+.m-prod-price-rate {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.m-sheet-close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #F4F6F4;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.m-sheet-close-btn:hover {
+    background: #E2E8F0;
+    color: var(--text-main);
+}
+
+/* পরিমাণ নির্বাচন */
+.m-qty-select-box {
+    margin-bottom: 16px;
+}
+
+.qty-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.qty-main-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.qty-rate-hint {
+    font-size: 11.5px;
+    color: var(--text-muted);
+}
+
+.qty-control-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.qty-quick-pills {
+    display: flex;
+    gap: 6px;
+}
+
+.q-pill {
+    padding: 6px 12px;
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    background: #FFFFFF;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.q-pill.active {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+}
+
+.qty-pill-stepper {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    background: #F8FAF9;
+    padding: 3px;
+}
+
+.btn-step-act {
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    border: none;
+    background: #FFFFFF;
+    color: var(--text-main);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.step-num-text {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--text-main);
+    padding: 0 10px;
+}
+
+/* কাস্টমার তথ্য ইনপুট কার্ড */
+.m-customer-info-card {
+    background: #F9FBFA;
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 14px;
+}
+
+.cust-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.cust-info-header h4 {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.auto-fill-tag {
+    background: #E8F3ED;
+    color: var(--primary);
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 6px;
+}
+
+.cust-input-group {
+    margin-bottom: 10px;
+}
+
+.cust-input-group:last-child {
+    margin-bottom: 0;
+}
+
+.cust-input-group label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.cust-input-group input,
+.cust-input-group textarea {
+    width: 100%;
+    background: #FFFFFF;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 12.5px;
+    color: var(--text-main);
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+}
+
+.cust-input-group input:focus,
+.cust-input-group textarea:focus {
+    border-color: var(--primary);
+}
+
+.cust-input-group textarea {
+    resize: none;
+}
+
+/* মূল্য সারাংশ কার্ড */
+.m-price-summary-card {
+    background: #FFFFFF;
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+}
+
+.sum-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.del-free-tag {
+    background: #E8F3ED;
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 6px;
+}
+
+.sum-total-divider {
+    border-top: 1px dashed var(--card-border);
+    margin: 8px 0;
+}
+
+.sum-final-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.total-label-text {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-main);
+    display: block;
+}
+
+.cod-hint-text {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.final-price-text {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.btn-confirm-sheet-order {
+    width: 100%;
+    background: var(--primary);
+    color: #FFFFFF;
+    border: none;
+    padding: 12px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-confirm-sheet-order:hover {
+    background: var(--primary-hover);
+    box-shadow: 0 4px 14px rgba(15, 56, 38, 0.25);
+}
+
+.btn-confirm-sheet-order:disabled {
+    background: #CBD5E1;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* --- আধুনিক অর্ডার কনফার্মেশন স্ক্রিন --- */
+.success-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-body);
+    z-index: 1000;
+    display: none;
+    overflow-y: auto;
+    padding: 30px 16px;
+}
+
+.success-overlay.active {
+    display: block;
+}
+
+.success-card-container {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.success-top-badge {
+    margin-bottom: 14px;
+}
+
+.success-circle-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #FFF;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(15, 56, 38, 0.25);
+}
+
+.success-main-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+
+.success-sub-title {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+}
+
+.success-order-id-box {
+    background: #FFFFFF;
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 12px;
+    margin-bottom: 14px;
+}
+
+.id-box-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.id-pill-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #F4F6F4;
+    padding: 4px 14px;
+    border-radius: 20px;
+}
+
+.id-pill-number {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.btn-copy-id {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    display: flex;
+}
+
+.success-summary-card {
+    background: #FFFFFF;
+    border: 1px solid var(--card-border);
+    border-radius: 18px;
+    padding: 14px;
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+.succ-prod-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--card-border);
+    margin-bottom: 10px;
+}
+
+.succ-prod-preview img {
+    width: 58px;
+    height: 58px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.succ-prod-info {
+    flex: 1;
+}
+
+.succ-prod-info h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.succ-prod-info p {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.succ-price-right {
+    text-align: right;
+}
+
+.succ-price-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    display: block;
+}
+
+.b-total-price {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.succ-pay-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    color: var(--text-muted);
+}
+
+.succ-pay-note svg {
+    color: var(--primary);
+}
+
+.success-action-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.btn-succ-primary {
+    background: var(--primary);
+    color: #FFF;
+    border: none;
+    padding: 11px;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-succ-secondary {
+    background: #FFFFFF;
+    color: var(--text-main);
+    border: 1px solid var(--card-border);
+    padding: 11px;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.success-help-box {
+    background: #F4F6F4;
+    border-radius: 16px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+}
+
+.help-text-side h4 {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.help-text-side p {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.btn-succ-wa {
+    background: #15803D;
+    color: #FFF;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 11.5px;
+    font-weight: 700;
+}
+
+/* --- ছবির হুবহু পূর্ণাঙ্গ "আমার অর্ডারসমূহ" পেজ স্টাইল --- */
+.orders-page-container {
+    padding-top: 20px;
+    padding-bottom: 40px;
+    max-width: 680px;
+}
+
+/* --- আধুনিক প্রিমিয়াম অর্ডার ফিল্টার পিলস (মার্জিত ও পারফেক্ট সাইজ) --- */
+.order-filter-pills-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 6px 4px 8px;
+}
+
+.order-filter-pills-row::-webkit-scrollbar {
+    display: none;
+}
+
+.op-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 15px;
+    border-radius: 25px;
+    font-size: 12.5px;
+    font-weight: 700;
+    border: 1px solid var(--card-border);
+    background: #FFFFFF;
+    color: var(--text-muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.op-pill-btn:hover {
+    background: #F8FAF9;
+    border-color: #D1DAD4;
+    color: var(--text-main);
+}
+
+.pill-badge-num {
+    font-size: 11px;
+    font-weight: 800;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 5px;
+    border-radius: 12px;
+    background: #F1F4F2;
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.op-pill-btn.active {
+    background: var(--primary) !important;
+    color: #FFFFFF !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 3px 12px rgba(15, 56, 38, 0.25) !important;
+}
+
+.op-pill-btn.active .pill-badge-num {
+    background: rgba(255, 255, 255, 0.22) !important;
+    color: #FFFFFF !important;
+}
+
+.pill-pending { color: #92400E; }
+.pill-pending .pill-badge-num { background: #FEF3C7; color: #B45309; }
+
+.pill-confirmed { color: #1E40AF; }
+.pill-confirmed .pill-badge-num { background: #DBEAFE; color: #1D4ED8; }
+
+.pill-delivered { color: #166534; }
+.pill-delivered .pill-badge-num { background: #DCFCE7; color: #15803D; }
+
+/* অর্ডারের কার্ড তালিকা (কমপ্যাক্ট দূরত্ব) */
+.orders-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* কার্ডগুলোর মধ্যকার অতিরিক্ত ফাঁকা দূরত্ব কমানো হয়েছে */
+}
+
+.orders-empty-loading {
+    text-align: center;
+    padding: 24px 12px;
+    color: var(--text-muted);
+    font-size: 12.5px;
+}
+
+/* --- স্লিম ও মার্জিত অর্ডার কার্ড ডিজাইন --- */
+.order-item-card-photo {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 16px;
+    padding: 10px 12px; /* ভেতরের প্যাডিং কমিয়ে নিটোল করা হয়েছে */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 0; /* ডাবল মার্জিন বন্ধ করা হয়েছে */
+}
+
+.order-item-card-photo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.o-thumb-img {
+    width: 72px;
+    height: 72px;
+    border-radius: 14px;
+    object-fit: cover;
+    background: #F3F4F6;
+    flex-shrink: 0;
+}
+
+.o-info-block {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0 4px;
+}
+
+.o-id-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+}
+
+.o-id-text {
+    font-size: 14px;
+    font-weight: 800;
+    color: #111827;
+    white-space: nowrap;
+    letter-spacing: -0.2px;
+}
+
+.btn-copy-mini {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6B7280;
+    display: inline-flex;
+    padding: 0;
+    transition: color 0.15s;
+}
+
+.btn-copy-mini:hover {
+    color: #111827;
+}
+
+.o-date-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: #6B7280;
+    margin-bottom: 3px;
+    white-space: nowrap;
+}
+
+.o-date-row svg {
+    color: #6B7280;
+}
+
+.o-product-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.o-qty-price-row {
+    font-size: 12px;
+    color: #4B5563;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.o-divider {
+    color: #D1D5DB;
+    margin: 0 2px;
+}
+
+.o-price-bold {
+    font-weight: 800;
+    color: #111827;
+    font-size: 13px;
+}
+
+.o-status-actions-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    align-self: stretch;
+    flex-shrink: 0;
+    gap: 8px;
+}
+
+.card-status-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.badge-pending {
+    background: #FEF3C7;
+    color: #B45309;
+}
+
+.badge-confirmed {
+    background: #DBEAFE;
+    color: #1D4ED8;
+}
+
+.badge-delivered {
+    background: #DCFCE7;
+    color: #15803D;
+}
+
+.card-action-btn {
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 14px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.act-whatsapp {
+    background: #F0FDF4;
+    border: 1px solid #BBF7D0;
+    padding: 4px 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-align: left;
+}
+
+.act-whatsapp .act-wa-ico-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #25D366;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.act-text-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.act-text-wrap .act-main {
+    font-size: 10px;
+    font-weight: 700;
+    color: #166534;
+    line-height: 1.15;
+}
+
+.act-text-wrap .act-sub {
+    font-size: 8.5px;
+    color: #15803D;
+    font-weight: 500;
+}
+
+.act-detail {
+    background: #F0FDF4;
+    border: 1px solid #BBF7D0;
+    color: #166534;
+    padding: 5px 12px;
+    font-size: 11.5px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.act-detail:hover, .act-whatsapp:hover {
+    background: #DCFCE7;
+    border-color: #86EFAC;
+}
+
+.act-reorder {
+    background: #F0FDF4;
+    border: 1px solid #BBF7D0;
+    color: #166534;
+    padding: 5px 12px;
+    font-size: 11.5px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* --- ছবির হুবহু পূর্ণাঙ্গ প্রোফাইল ও অথেন্টিকেশন পেজ স্ক্রিন স্টাইল --- */
+.profile-page-container {
+    padding-top: 16px;
+    padding-bottom: 40px;
+    max-width: 580px;
+}
+
+.auth-full-screen-card {
+    background: #FFFFFF;
+    border: 1px solid var(--card-border);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+}
+
+.auth-form-card {
+    padding: 22px 18px;
+}
+
+.auth-card-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #123C27;
+    margin-bottom: 2px;
+}
+
+.auth-card-sub {
+    font-size: 12px;
+    color: #6B7280;
+    margin-bottom: 18px;
+}
+
+.auth-input-pill-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #F9F7F2;
+    border: 1px solid #EADBCE;
+    border-radius: 14px;
+    padding: 8px 14px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+}
+
+.auth-input-pill-box:focus-within {
+    border-color: #123C27;
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(18, 60, 39, 0.08);
+}
+
+.auth-f-icon {
+    font-size: 16px;
+    color: #6B7280;
+}
+
+.auth-f-input {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-f-input label {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #8C6D62;
+    margin-bottom: 1px;
+}
+
+.auth-f-input input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 12.5px;
+    color: #2C1209;
+    font-weight: 600;
+    padding: 0;
+}
+
+.auth-eye-btn {
+    font-size: 14px;
+    cursor: pointer;
+    color: #8C6D62;
+    user-select: none;
+}
+
+.auth-options-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 6px 0 16px;
+    font-size: 11.5px;
+}
+
+.auth-chk-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #374151;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.auth-link-forgot {
+    color: #123C27;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.btn-auth-action {
+    width: 100%;
+    background: #123C27;
+    color: #FFF;
+    border: none;
+    padding: 12px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(18, 60, 39, 0.2);
+}
+
+.btn-auth-action:hover {
+    background: #0B2518;
+}
+
+.auth-bottom-switch {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 12px;
+    color: #6B7280;
+}
+
+.auth-bottom-switch a {
+    color: #123C27;
+    font-weight: 800;
+    text-decoration: none;
+    margin-left: 4px;
+}
+
+/* ==========================================================================
+   প্রোফাইল পেজ স্টাইলিং (Pixel Perfect)
+   ========================================================================== */
+
+.rr-pixel-profile-screen {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 6px 14px 24px;
+    background: #FDFCF9;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+
+/* কমপ্যাক্ট প্রিমিয়াম প্রোফাইল স্টাইল */
+.rr-user-hero-card {
+    background: #EDF6EE;
+    border: 1px solid #D6EAD8;
+    border-radius: 16px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 10px;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(18, 60, 39, 0.02);
+}
+
+.rr-user-avatar-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1.5px solid #FFFFFF;
+    box-shadow: 0 2px 6px rgba(18, 60, 39, 0.08);
+    flex-shrink: 0;
+    background: #DCEFE0;
+}
+
+.rr-avatar-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rr-user-meta-wrap {
+    flex: 1;
+    min-width: 0;
+    z-index: 2;
+}
+
+.rr-user-name-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 1px;
+}
+
+.rr-user-name-line h3 {
+    font-size: 15px;
+    font-weight: 800;
+    color: #123C27;
+    line-height: 1.2;
+}
+
+.rr-tag-verified {
+    background: #D9F2E2;
+    color: #107C41;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.rr-user-phone-line {
+    font-size: 11px;
+    color: #374151;
+    font-weight: 600;
+    margin-bottom: 1px;
+}
+
+.rr-user-addr-line {
+    font-size: 10.5px;
+    color: #4B6354;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rr-hero-leaf-graphic {
+    position: absolute;
+    right: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.2;
+}
+
+.rr-hero-right-arrow {
+    font-size: 16px;
+    color: #6B7280;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.rr-stats-quad-card {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: #FFFFFF;
+    border: 1px solid #E8E4DC;
+    border-radius: 14px;
+    padding: 8px 4px;
+    text-align: center;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.rr-stat-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    padding: 1px 0;
+}
+
+.rr-stat-col:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 15%;
+    height: 70%;
+    width: 1px;
+    background: #EBE7DF;
+}
+
+.rr-stat-ico {
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 18px;
+}
+
+.rr-stat-val {
+    font-size: 14px;
+    font-weight: 800;
+    color: #123C27;
+    line-height: 1.1;
+    margin-bottom: 1px;
+}
+
+.rr-stat-lbl {
+    font-size: 9.5px;
+    color: #4B6354;
+    font-weight: 600;
+}
+
+.rr-group-section {
+    margin-bottom: 10px;
+}
+
+.rr-group-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 5px;
+    padding-left: 2px;
+}
+
+.rr-group-header h3 {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #123C27;
+}
+
+.rr-menu-white-card {
+    background: #FFFFFF;
+    border: 1px solid #E8E4DC;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.rr-menu-row-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    border-bottom: 1px solid #F4F1EA;
+}
+
+.rr-menu-row-item:last-child {
+    border-bottom: none;
+}
+
+.rr-menu-row-item:hover {
+    background: #FAF8F4;
+}
+
+.rr-menu-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rr-icon-circle-bg {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #E8F3EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.rr-menu-text h4 {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1A2E24;
+    line-height: 1.2;
+    margin-bottom: 1px;
+}
+
+.rr-menu-text p {
+    font-size: 10px;
+    color: #6B7C72;
+    line-height: 1.15;
+}
+
+.rr-arrow-right {
+    font-size: 15px;
+    color: #9CA3AF;
+    font-weight: bold;
+}
+
+/* --- পছন্দ (Favorites) পেজ স্ক্রিন স্টাইল --- */
+.favorites-page-container {
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
+.fav-empty-box {
+    text-align: center;
+    padding: 50px 20px;
+    background: #FFFFFF;
+    border: 1px dashed var(--card-border);
+    border-radius: 20px;
+    margin: 20px auto;
+    max-width: 420px;
+}
+
+.fav-empty-icon {
+    font-size: 42px;
+    color: #94A3B8;
+    margin-bottom: 10px;
+    line-height: 1;
+}
+
+.fav-empty-box h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 6px;
+}
+
+.fav-empty-box p {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+    line-height: 1.5;
+}
+
+.fav-empty-box .btn-card-order {
+    display: inline-flex;
+    margin: 0 auto;
+    padding: 8px 22px;
+    font-size: 13px;
+}
+
+/* --- প্রিমিয়াম টোস্ট নোটিফিকেশন (Alert এর বিকল্প) --- */
+.custom-toast-box {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: #11422E;
+    color: #FFFFFF;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 13.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    z-index: 999999;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.custom-toast-box.active {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.custom-toast-box.error {
+    background: #DC2626;
+}

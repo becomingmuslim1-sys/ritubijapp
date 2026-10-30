@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.ritubij.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Ritubij</name>
+    <description>ঋতুবীজ - খাঁটি ঐতিহ্য ও মৌসুমী সম্ভার</description>
+    <author email="info@ritubij.com" href="https://ritubij.com">Ritubij Team</author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-navigation href="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="whatsapp:*" />
+    <preference name="scheme" value="https" />
+    <preference name="hostname" value="localhost" />
+</widget>

@@ -1,0 +1,2271 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ঋতুবীজ | এডমিন কন্ট্রোল</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons লাইব্রেরি -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-page: #F6F8FA;
+            --primary-green: #11694E;
+            --dark-green: #0D4E3A;
+            --accent-orange: #F59E0B;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --card-border: #E5E7EB;
+            --white: #FFFFFF;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Hind Siliguri', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg-page); color: var(--text-main); padding-bottom: 85px; }
+
+        /* Login Screen */
+        #loginScreen {
+            position: fixed; inset: 0; background: #261108;
+            display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px;
+        }
+        .login-box {
+            background: #FFF; width: 100%; max-width: 360px; padding: 32px 24px;
+            border-radius: 24px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+        .login-box h2 { font-size: 22px; color: #261108; margin-bottom: 6px; }
+        .login-box input {
+            width: 100%; padding: 13px; margin: 18px 0 12px; border: 1.5px solid #E5E7EB;
+            border-radius: 12px; font-size: 16px; text-align: center; outline: none;
+        }
+        .login-box button {
+            width: 100%; padding: 13px; background: #B45309; color: #FFF;
+            border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer;
+        }
+
+        /* Top Bar */
+        .top-app-header {
+            background: #FFF; padding: 12px 16px; border-bottom: 1px solid #ECEFF2;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 90;
+        }
+        .brand-block { display: flex; align-items: center; gap: 10px; }
+        .brand-icon-box {
+            width: 38px; height: 38px; border-radius: 10px; background: #EAF5EE;
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+        }
+        .brand-text-block h1 { font-size: 17px; font-weight: 800; color: var(--primary-green); line-height: 1.1; }
+        .brand-text-block p { font-size: 11px; color: var(--text-muted); }
+        .header-right-meta { display: flex; align-items: center; gap: 12px; }
+        .notification-bell { position: relative; font-size: 20px; cursor: pointer; text-decoration: none; }
+        .bell-badge {
+            position: absolute; top: -6px; right: -6px; background: #DC2626; color: #FFF;
+            font-size: 10px; font-weight: 700; width: 17px; height: 17px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .admin-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #E5E7EB; }
+
+        .main-container { max-width: 600px; margin: 0 auto; padding: 14px; }
+
+        /* Welcome Banner */
+        .welcome-hero-banner {
+            background: linear-gradient(135deg, #EAF7EE 0%, #F5FAF6 100%);
+            border-radius: 18px; padding: 16px 18px; margin-bottom: 16px;
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid #D5EAD9; position: relative; overflow: hidden;
+        }
+        .welcome-text h2 { font-size: 18px; font-weight: 800; color: #0E4B37; margin-bottom: 2px; }
+        .welcome-text p { font-size: 12px; color: #52796F; }
+        .welcome-decor-img { width: 110px; height: auto; object-fit: contain; }
+
+        /* 2x2 Stats Grid */
+        .stats-grid-modern { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-card-modern {
+            background: #FFF; border-radius: 16px; padding: 12px 14px;
+            border: 1px solid var(--card-border); position: relative; overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .stat-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .stat-icon-wrap {
+            width: 38px; height: 38px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .stat-icon-wrap svg { width: 20px; height: 20px; stroke-width: 2.2px; }
+        .icon-bg-orders { background: #E8F5E9; color: #15803D; }
+        .icon-bg-pending { background: #FFF3E0; color: #B45309; }
+        .icon-bg-sales { background: #E6F7F0; color: #11694E; }
+        .icon-bg-products { background: #FFF8E1; color: #D97706; }
+
+        .stat-card-modern h4 { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+        .stat-card-modern .stat-val { font-size: 20px; font-weight: 800; color: #111827; line-height: 1.2; margin-bottom: 2px; }
+        .stat-card-modern .stat-trend { font-size: 11px; font-weight: 700; }
+        .trend-up { color: #16A34A; }
+        .trend-down { color: #DC2626; }
+
+        /* Section Headers */
+        .app-sec-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+        }
+        .app-sec-header h3 { font-size: 15px; font-weight: 800; color: #111827; display: flex; align-items: center; gap: 6px; }
+        .app-sec-header h3 svg { width: 18px; height: 18px; stroke-width: 2.2px; color: var(--primary-green); }
+        .btn-view-all {
+            background: var(--primary-green); color: #FFF; text-decoration: none;
+            padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700;
+            display: inline-flex; align-items: center; gap: 4px;
+        }
+
+        /* Order Cards */
+        .orders-v-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+        .order-card-box {
+            background: #FFF; border-radius: 18px; border: 1px solid var(--card-border);
+            padding: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .order-meta-grid {
+            display: grid; grid-template-columns: 1.2fr 1.2fr 0.9fr; gap: 8px;
+            align-items: center; padding-bottom: 12px; border-bottom: 1px solid #F3F4F6;
+        }
+        .cust-profile { display: flex; align-items: center; gap: 8px; }
+        .cust-avatar-img {
+            width: 38px; height: 38px; border-radius: 50%; background: #E5E7EB;
+            display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+        }
+        .cust-name { font-size: 13px; font-weight: 700; color: #111827; line-height: 1.2; }
+        .cust-phone { font-size: 11px; color: var(--text-muted); }
+
+        .order-item-mid { display: flex; align-items: center; gap: 8px; }
+        .order-item-mid img { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; }
+        .order-item-mid h5 { font-size: 12px; font-weight: 700; color: #111827; }
+        .order-item-mid p { font-size: 11px; color: var(--text-muted); }
+        .order-item-mid .price { font-size: 12px; font-weight: 800; color: #111827; }
+
+        .order-status-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+        .status-pill-badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+        .status-bg-pending { background: #FEF3C7; color: #B45309; }
+        .status-bg-confirmed { background: #E0E7FF; color: #3730A3; }
+        .status-bg-delivered { background: #DCFCE7; color: #15803D; }
+        .status-bg-cancelled { background: #FEE2E2; color: #DC2626; }
+
+        .status-control-row { display: flex; align-items: center; gap: 6px; }
+        .status-select-native {
+            font-size: 10px; font-weight: 700; padding: 3px 6px; border-radius: 8px;
+            border: 1px solid #D1D5DB; background: #FFF; outline: none; cursor: pointer;
+        }
+        .btn-trash-icon { background: none; border: none; color: #EF4444; font-size: 15px; cursor: pointer; }
+
+        .order-addr-row { padding: 8px 0; font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+        .order-action-btns-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+        .btn-action-call, .btn-action-wa {
+            background: var(--primary-green); color: #FFF; border: none; text-decoration: none;
+            padding: 7px 10px; border-radius: 20px; font-size: 12px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+
+        /* Products Grid */
+        .products-h-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+        .prod-mini-card {
+            background: #FFF; border: 1px solid var(--card-border); border-radius: 14px;
+            padding: 8px; display: flex; flex-direction: column;
+        }
+        .prod-mini-card img { width: 100%; height: 75px; border-radius: 10px; object-fit: cover; margin-bottom: 6px; }
+        .prod-mini-card h5 { font-size: 12px; font-weight: 700; color: #111827; }
+        .prod-mini-card p { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+        .prod-mini-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+        .badge-stock-pill { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 10px; cursor: pointer; border: none; }
+        .stock-in { background: #DCFCE7; color: #15803D; }
+        .stock-out { background: #FEE2E2; color: #DC2626; }
+
+        /* Review Card */
+        .reviews-wrap-sec { margin-bottom: 24px; }
+        .review-card-modern {
+            background: #FFF; border-radius: 16px; border: 1px solid var(--card-border);
+            padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start;
+        }
+        .rev-avatar-circle {
+            width: 36px; height: 36px; border-radius: 50%; background: #E5E7EB;
+            display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+        }
+        .rev-body-meta { flex: 1; }
+        .rev-header-line { display: flex; justify-content: space-between; align-items: center; }
+        .rev-header-line h5 { font-size: 13px; font-weight: 700; }
+        .rev-header-line p { font-size: 11px; color: var(--text-muted); }
+        .rev-stars-row { color: #F59E0B; font-size: 11px; margin: 2px 0 4px; }
+        .rev-text-quote { font-size: 12px; color: #4B5563; line-height: 1.3; }
+
+        /* Panels */
+        .app-panel { display: none; }
+        .app-panel.active { display: block; }
+
+        /* Floating Action Button */
+        .fab-modern {
+            position: fixed; bottom: 74px; right: 16px;
+            background: var(--primary-green); color: #FFF; border: none;
+            padding: 9px 16px; border-radius: 30px; font-size: 12px; font-weight: 700;
+            display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(17,105,78,0.35);
+            cursor: pointer; z-index: 80;
+        }
+
+        /* Bottom Navigation Bar */
+        .bottom-nav-bar {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 60px;
+            background: #FFF; border-top: 1px solid #ECEFF2;
+            display: flex; justify-content: space-around; align-items: center; z-index: 100;
+        }
+        .bottom-nav-item {
+            display: flex; flex-direction: column; align-items: center; gap: 2px;
+            background: none; border: none; color: #6B7280; font-size: 10px; font-weight: 700;
+            cursor: pointer; padding: 6px 12px;
+        }
+        .bottom-nav-item .nav-icon { font-size: 18px; }
+        .bottom-nav-item svg { width: 20px; height: 20px; stroke-width: 2.2px; }
+        .bottom-nav-item.active { color: var(--primary-green); }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            display: none; align-items: flex-end; justify-content: center; z-index: 999;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-card {
+            background: #FFF; width: 100%; max-width: 540px; border-radius: 24px 24px 0 0;
+            padding: 22px 20px 30px; max-height: 90vh; overflow-y: auto;
+            animation: slideUp 0.25s ease-out;
+        }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .modal-header h3 { font-size: 16px; font-weight: 800; }
+        .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: #6B7280; }
+        .form-group { margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px; }
+        .form-group label { font-size: 12px; font-weight: 700; color: #4B5563; }
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 10px 12px; border: 1px solid #D1D5DB; border-radius: 10px; font-size: 13px; outline: none;
+        }
+        .btn-submit-modal {
+            background: var(--primary-green); color: #FFF; border: none; width: 100%;
+            padding: 12px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px;
+        }
+        /* অর্ডার পেজ আধুনিক স্টাইলসমূহ */
+        .order-mgmt-header {
+            display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;
+        }
+        .order-mgmt-title h2 { font-size: 19px; font-weight: 800; color: #111827; }
+        .order-mgmt-title p { font-size: 12px; color: var(--text-muted); }
+        .btn-refresh-circle {
+            background: #FFF; border: 1px solid #D1D5DB; width: 34px; height: 34px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 16px; cursor: pointer; color: #374151; transition: 0.2s;
+        }
+
+        .order-search-row {
+            display: flex; gap: 8px; margin-bottom: 12px;
+        }
+        .order-search-input-wrap {
+            position: relative; flex: 1;
+        }
+        .order-search-input-wrap input {
+            width: 100%; padding: 10px 12px 10px 34px; border: 1px solid #D1D5DB;
+            border-radius: 12px; font-size: 13px; background: #FFF; outline: none;
+        }
+        .order-search-input-wrap .search-icon {
+            position: absolute; left: 10px; top: 11px; width: 16px; height: 16px; color: #9CA3AF;
+        }
+        .order-head-v2 svg { width: 14px; height: 14px; stroke-width: 2.2px; vertical-align: middle; }
+        .order-cust-v2 svg { width: 13px; height: 13px; stroke-width: 2px; vertical-align: middle; color: #6B7280; }
+        .order-action-grid-4 svg { width: 13px; height: 13px; stroke-width: 2.2px; }
+        .btn-filter-action {
+            background: var(--primary-green); color: #FFF; border: none; padding: 0 14px;
+            border-radius: 12px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px; cursor: pointer;
+        }
+
+        /* ফিল্টার পিলস মেনু */
+        .order-status-tabs {
+            display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; scrollbar-width: none;
+        }
+        .order-status-tabs::-webkit-scrollbar { display: none; }
+        .order-tab-btn {
+            background: #FFF; border: 1px solid #E5E7EB; padding: 6px 14px; border-radius: 20px;
+            font-size: 12px; font-weight: 700; color: #4B5563; cursor: pointer; white-space: nowrap; transition: 0.2s;
+        }
+        .order-tab-btn.active {
+            background: var(--dark-green); color: #FFF; border-color: var(--dark-green);
+        }
+        .tab-pending { background: #FEF3C7; color: #92400E; border-color: #FDE68A; }
+        .tab-confirmed { background: #E0E7FF; color: #3730A3; border-color: #C7D2FE; }
+        .tab-delivered { background: #DCFCE7; color: #166534; border-color: #BBF7D0; }
+        .tab-cancelled { background: #FEE2E2; color: #991B1B; border-color: #FECACA; }
+
+        /* কার্ডের নতুন লেআউট */
+        .order-box-v2 {
+            background: #FFF; border: 1px solid #E5E7EB; border-radius: 18px;
+            padding: 14px; margin-bottom: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .order-head-v2 {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            padding-bottom: 10px; border-bottom: 1px solid #F3F4F6;
+        }
+        .order-id-txt { font-size: 14px; font-weight: 800; color: #111827; }
+        .order-date-txt { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+        .order-head-right { display: flex; align-items: center; gap: 8px; }
+
+        .order-cust-v2 {
+            display: flex; align-items: flex-start; gap: 10px; padding: 10px 0;
+        }
+        .order-cust-avatar {
+            width: 38px; height: 38px; border-radius: 50%; background: #E5E7EB;
+            display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+        }
+        .order-cust-details h4 { font-size: 13px; font-weight: 700; color: #111827; }
+        .order-cust-details p { font-size: 11px; color: var(--text-muted); }
+
+        .order-prod-row-v2 {
+            background: #F9FAFB; border-radius: 14px; padding: 10px 12px;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+        }
+        .prod-left-side { display: flex; align-items: center; gap: 10px; }
+        .prod-left-side img { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; }
+        .prod-info-v2 h5 { font-size: 13px; font-weight: 700; color: #111827; }
+        .prod-info-v2 p { font-size: 11px; color: var(--text-muted); }
+        .prod-pricing-v2 { text-align: right; }
+        .prod-pricing-v2 .total-lbl { font-size: 10px; color: var(--text-muted); }
+        .prod-pricing-v2 .total-amount { font-size: 14px; font-weight: 800; color: var(--primary-green); }
+
+        /* চার বাটনের আধুনিক অ্যাকশন বার */
+        .order-action-grid-4 {
+            display: grid; grid-template-columns: 1fr 1fr 1.3fr 1.1fr; gap: 6px; align-items: center;
+        }
+        .btn-act-v2 {
+            padding: 7px 6px; border-radius: 10px; font-size: 11px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center; gap: 4px; text-decoration: none; border: none; cursor: pointer; text-align: center; white-space: nowrap;
+        }
+        .btn-act-call { background: var(--primary-green); color: #FFF; }
+        .btn-act-wa { background: #15803D; color: #FFF; }
+        .btn-act-detail { background: #F3F4F6; color: #374151; border: 1px solid #D1D5DB; }
+        .select-status-v2 {
+            width: 100%; padding: 6px 4px; font-size: 10px; font-weight: 700;
+            border-radius: 10px; border: 1px solid #D1D5DB; background: #FFF; outline: none; cursor: pointer;
+        }
+        /* পণ্য ব্যবস্থাপনা আধুনিক পেজের স্টাইল */
+        .prod-top-stats-3 {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px;
+        }
+        .stat-card-p3 {
+            background: #FFF; border: 1px solid var(--card-border); border-radius: 14px;
+            padding: 10px 8px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .stat-card-p3 .p3-icon {
+            width: 32px; height: 32px; border-radius: 50%; margin: 0 auto 4px;
+            display: flex; align-items: center; justify-content: center; font-size: 15px;
+        }
+        .stat-card-p3 h5 { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+        .stat-card-p3 .p3-num { font-size: 18px; font-weight: 800; color: #111827; line-height: 1.2; }
+
+        .btn-add-prod-banner {
+            width: 100%; background: var(--dark-green); color: #FFF; border: none;
+            padding: 10px; border-radius: 12px; font-size: 13px; font-weight: 800;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            cursor: pointer; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(13,78,58,0.25);
+        }
+
+        /* ২-কলামের পণ্য গ্রিড */
+        .prod-card-body-v2 svg { width: 13px; height: 13px; stroke-width: 2.2px; vertical-align: middle; }
+        .btn-add-prod-banner svg { width: 16px; height: 16px; stroke-width: 2.5px; }
+        .prod-grid-2col {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px;
+        }
+        .prod-card-v2 {
+            background: #FFF; border: 1px solid var(--card-border); border-radius: 16px;
+            overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .prod-card-v2 img {
+            width: 100%; height: 110px; object-fit: cover; background: #F3F4F6;
+        }
+        .prod-card-body-v2 {
+            padding: 10px; display: flex; flex-direction: column; flex-grow: 1;
+        }
+        .prod-title-row {
+            display: flex; justify-content: space-between; align-items: flex-start; gap: 4px; margin-bottom: 4px;
+        }
+        .prod-title-row h4 { font-size: 13px; font-weight: 700; color: #111827; line-height: 1.2; }
+        .badge-stock-tag {
+            font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 8px; white-space: nowrap;
+        }
+        .tag-instock { background: #E8F5E9; color: #166534; }
+        .tag-outstock { background: #FEE2E2; color: #991B1B; }
+
+        .prod-price-text { font-size: 12px; font-weight: 700; color: #374151; margin-bottom: 2px; }
+        .prod-category-tag { font-size: 11px; color: #11694E; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 3px; }
+
+        .prod-card-footer-v2 {
+            display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 6px; border-top: 1px dashed #F3F4F6;
+        }
+        .btn-toggle-stock-pill {
+            background: #11694E; color: #FFF; border: none; padding: 4px 8px;
+            border-radius: 14px; font-size: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px;
+        }
+        .btn-toggle-stock-pill.out { background: #DC2626; }
+        .prod-actions-right { display: flex; align-items: center; gap: 6px; }
+        .btn-mini-act {
+            background: none; border: none; font-size: 13px; cursor: pointer; padding: 2px;
+        }
+        /* কাস্টমার রিভিউ আধুনিক পেজের স্টাইল */
+        .rev-top-stats-3 {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px;
+        }
+        .stat-card-rev {
+            background: #FFF; border: 1px solid var(--card-border); border-radius: 14px;
+            padding: 10px 8px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .stat-card-rev .rev-icon-circle {
+            width: 32px; height: 32px; border-radius: 50%; margin: 0 auto 4px;
+            display: flex; align-items: center; justify-content: center; font-size: 15px;
+        }
+        .stat-card-rev h5 { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+        .stat-card-rev .rev-stat-num { font-size: 18px; font-weight: 800; color: #111827; line-height: 1.2; }
+
+        .btn-add-rev-banner {
+            width: 100%; background: var(--dark-green); color: #FFF; border: none;
+            padding: 10px; border-radius: 12px; font-size: 13px; font-weight: 800;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            cursor: pointer; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(13,78,58,0.25);
+        }
+
+        /* রিভিউ কার্ডের আধুনিক রূপ */
+        .rev-card-v2 svg { width: 13px; height: 13px; stroke-width: 2.2px; vertical-align: middle; }
+        .rev-stars-line svg { width: 14px; height: 14px; fill: #F59E0B; color: #F59E0B; }
+        .btn-add-rev-banner svg { width: 16px; height: 16px; stroke-width: 2.5px; }
+        .rev-card-v2 {
+            background: #FFF; border: 1px solid var(--card-border); border-radius: 16px;
+            padding: 14px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .rev-header-v2 {
+            display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;
+        }
+        .rev-cust-meta { display: flex; align-items: center; gap: 10px; }
+        .rev-cust-avatar {
+            width: 40px; height: 40px; border-radius: 50%; background: #E5E7EB;
+            display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+        }
+        .rev-cust-info h4 {
+            font-size: 14px; font-weight: 800; color: #111827; display: flex; align-items: center; gap: 4px;
+        }
+        .verified-badge { color: #11694E; font-size: 13px; }
+        .rev-cust-info p { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+        .rev-stars-line { color: #F59E0B; font-size: 14px; margin-bottom: 6px; letter-spacing: 2px; }
+        .rev-text-quote-v2 {
+            font-size: 13px; color: #374151; line-height: 1.4; margin-bottom: 10px;
+        }
+
+        .rev-product-pill {
+            display: inline-flex; align-items: center; gap: 8px; background: #F9FAFB;
+            border: 1px solid #E5E7EB; border-radius: 12px; padding: 4px 10px;
+        }
+        .rev-product-pill img { width: 30px; height: 30px; border-radius: 8px; object-fit: cover; }
+        .rev-product-pill span { font-size: 11px; font-weight: 700; color: #11694E; }
+    /* সাইট সেটিংস আধুনিক পেজের স্টাইল */
+        .set-nav-tabs {
+            display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 16px; scrollbar-width: none;
+        }
+        .set-nav-tabs::-webkit-scrollbar { display: none; }
+        .set-nav-pill {
+            background: #FFF; border: 1px solid var(--card-border); padding: 7px 14px;
+            border-radius: 20px; font-size: 12px; font-weight: 700; color: #4B5563;
+            white-space: nowrap; cursor: pointer; transition: 0.2s;
+        }
+        .set-nav-pill.active {
+            background: var(--dark-green); color: #FFF; border-color: var(--dark-green);
+        }
+.set-card-head svg { width: 17px; height: 17px; stroke-width: 2.2px; color: var(--primary-green); }
+        .input-icon-group svg { width: 15px; height: 15px; stroke-width: 2.2px; color: #6B7280; }
+        .counter-in-card svg { width: 22px; height: 22px; stroke-width: 2px; color: var(--primary-green); margin: 0 auto 2px; display: block; }
+        .set-nav-pill svg { width: 14px; height: 14px; stroke-width: 2.2px; vertical-align: middle; margin-right: 4px; }
+        .btn-add-banner-pill svg, .btn-save-settings-main svg { width: 15px; height: 15px; stroke-width: 2.2px; vertical-align: middle; }
+        .security-badge svg { width: 14px; height: 14px; stroke-width: 2.2px; color: #166534; vertical-align: middle; }
+        .set-card-box {
+            background: #FFF; border: 1px solid var(--card-border); border-radius: 18px;
+            padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .set-card-head {
+            display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+        }
+        .set-card-head h4 { font-size: 15px; font-weight: 800; color: #111827; }
+
+        .set-input-grid-2 {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+        }
+        @media (max-width: 500px) {
+            .set-input-grid-2 { grid-template-columns: 1fr; }
+        }
+
+        .input-icon-group {
+            position: relative; display: flex; align-items: center;
+        }
+        .input-icon-group input, .input-icon-group textarea {
+            width: 100%; padding: 10px 12px 10px 36px; border: 1px solid #D1D5DB;
+            border-radius: 10px; font-size: 13px; outline: none; background: #FDFDFD;
+        }
+        .input-icon-group .icon-left {
+            position: absolute; left: 10px; font-size: 15px; color: #6B7280; pointer-events: none;
+        }
+        .input-icon-group .eye-toggle {
+            position: absolute; right: 10px; font-size: 15px; color: #6B7280; cursor: pointer;
+        }
+
+        /* ৪টি হোমপেজ কাউন্টার ইনপুট গ্রিড */
+        .counter-inputs-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 8px;
+        }
+        @media (max-width: 500px) {
+            .counter-inputs-grid { grid-template-columns: 1fr 1fr; }
+        }
+        .counter-in-card {
+            background: #F9FAFB; border: 1px solid var(--card-border); border-radius: 12px;
+            padding: 10px 8px; text-align: center;
+        }
+        .counter-in-card span { font-size: 20px; display: block; margin-bottom: 2px; }
+        .counter-in-card label { font-size: 10px; font-weight: 700; color: #4B5563; display: block; margin-bottom: 4px; }
+        .counter-in-card input {
+            width: 100%; padding: 6px; border: 1px solid #D1D5DB; border-radius: 8px;
+            font-size: 13px; font-weight: 700; text-align: center; outline: none; background: #FFF;
+        }
+
+        .footnote-hint {
+            font-size: 11px; color: #6B7280; display: flex; align-items: center; gap: 4px; margin-top: 8px;
+        }
+
+        /* ব্যানার ম্যানেজমেন্ট ইনপুট */
+        .banner-upload-bar {
+            display: flex; gap: 8px; align-items: center; background: #F9FAFB;
+            border: 1px solid #E5E7EB; border-radius: 12px; padding: 10px 12px; margin-bottom: 12px;
+        }
+        .banner-upload-bar input { font-size: 11px; flex: 1; }
+        .btn-add-banner-pill {
+            background: var(--dark-green); color: #FFF; border: none; padding: 7px 14px;
+            border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;
+        }
+
+        /* অ্যাডমিন সিকিউরিটি কার্ড */
+        .security-badge {
+            background: #E8F5E9; color: #166534; font-size: 11px; font-weight: 700;
+            padding: 6px 12px; border-radius: 10px; display: inline-flex; align-items: center;
+            gap: 6px; margin-bottom: 12px;
+        }
+
+        .btn-save-settings-main {
+            width: 100%; background: var(--dark-green); color: #FFF; border: none;
+            padding: 12px; border-radius: 14px; font-size: 14px; font-weight: 800;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            cursor: pointer; box-shadow: 0 4px 14px rgba(13,78,58,0.25); margin-bottom: 8px;
+        }
+        .btn-cancel-link {
+            display: block; text-align: center; font-size: 12px; color: #6B7280;
+            text-decoration: none; font-weight: 700; cursor: pointer; margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Security Login Screen (SVG আইকন সহ) -->
+    <div id="loginScreen">
+        <div class="login-box">
+            <div style="display:flex; justify-content:center; margin-bottom:8px; color:#B45309;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <h2>এডমিন লগইন</h2>
+            <p style="font-size: 13px; color: #666; margin-bottom: 8px;">ঋতুবীজ এডমিন কন্ট্রোল</p>
+            <input type="password" id="adminPin" placeholder="পাসওয়ার্ড লিখুন" onkeydown="if(event.key==='Enter') checkLogin();" />
+            <button type="button" onclick="checkLogin()">প্রবেশ করুন</button>
+            <p id="loginError" style="color: red; font-size: 12px; margin-top: 10px; display: none;">ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।</p>
+        </div>
+    </div>
+
+    <!-- Top App Bar (SVG আইকন সহ) -->
+    <header class="top-app-header">
+        <div class="brand-block">
+            <div class="brand-icon-box" style="color:var(--primary-green);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13C4 5 14 3 21 3c0 7-2 17-10 17Z"/><path d="M8 16c3-3 6-5 11-9"/></svg>
+            </div>
+            <div class="brand-text-block">
+                <h1>ঋতুবীজ</h1>
+                <p>প্রকৃতির স্বাদ, আপনার জন্য</p>
+            </div>
+        </div>
+        <div class="header-right-meta">
+            <a href="javascript:void(0)" onclick="switchTab('ordersPanel', document.querySelectorAll('.bottom-nav-item')[1])" class="notification-bell" title="পেন্ডিং অর্ডার" style="display:flex; align-items:center; color:#4B5563;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
+                <span class="bell-badge" id="topBellBadge">0</span>
+            </a>
+            <!-- বাইরের ছবি বাদ দিয়ে সুন্দর এডমিন ইউজার আইকন -->
+            <div style="width: 38px; height: 38px; border-radius: 50%; background: #EAF5EE; border: 2px solid #D1E7D8; display: flex; align-items: center; justify-content: center; color: #11694E;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <!-- ১. ড্যাশবোর্ড প্যানেল -->
+        <div id="dashboardPanel" class="app-panel active">
+            <div class="welcome-hero-banner">
+                <div class="welcome-text">
+                    <h2>স্বাগতম, অ্যাডমিন!</h2>
+                    <p>আপনার ব্যবসার সারসংক্ষেপ</p>
+                </div>
+                <!-- বাইরের ছবি বাদ দিয়ে খাঁটি পাতার আর্ট ভেক্টর -->
+                <div style="opacity: 0.85; color: #11694E; display: flex; align-items: center; justify-content: center;">
+                    <svg width="65" height="65" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 20A7 7 0 0 1 4 13C4 5 14 3 21 3c0 7-2 17-10 17Z"/><path d="M8 16c3-3 6-5 11-9"/></svg>
+                </div>
+            </div>
+
+            <!-- 2x2 Stats Grid (আসল ও অর্থপূর্ণ লেবেল সহ) -->
+            <div class="stats-grid-modern">
+                <!-- ১. মোট অর্ডার -->
+                <div class="stat-card-modern">
+                    <div class="stat-card-header">
+                        <div class="stat-icon-wrap icon-bg-orders">
+                            <i data-lucide="shopping-cart"></i>
+                        </div>
+                        <h4>মোট অর্ডার</h4>
+                    </div>
+                    <div class="stat-val" id="totalOrders">0</div>
+                    <div class="stat-trend" style="color: #15803D; font-weight: 600;">সব অর্ডার এক নজরে</div>
+                </div>
+
+                <!-- ২. পেন্ডিং অর্ডার -->
+                <div class="stat-card-modern">
+                    <div class="stat-card-header">
+                        <div class="stat-icon-wrap icon-bg-pending">
+                            <i data-lucide="clock"></i>
+                        </div>
+                        <h4>পেন্ডিং অর্ডার</h4>
+                    </div>
+                    <div class="stat-val" id="pendingOrders" style="color:#B45309;">0</div>
+                    <div class="stat-trend" style="color: #B45309; font-weight: 600;">প্রসেসিং প্রয়োজন</div>
+                </div>
+
+                <!-- ৩. মোট বিক্রয় -->
+                <div class="stat-card-modern">
+                    <div class="stat-card-header">
+                        <div class="stat-icon-wrap icon-bg-sales">
+                            <i data-lucide="banknote"></i>
+                        </div>
+                        <h4>মোট বিক্রয়</h4>
+                    </div>
+                    <div class="stat-val" id="totalSales">৳ 0</div>
+                    <div class="stat-trend" style="color: #11694E; font-weight: 600;">ক্যাশ অন ডেলিভারি</div>
+                </div>
+
+                <!-- ৪. মোট পণ্য -->
+                <div class="stat-card-modern">
+                    <div class="stat-card-header">
+                        <div class="stat-icon-wrap icon-bg-products">
+                            <i data-lucide="package"></i>
+                        </div>
+                        <h4>মোট পণ্য</h4>
+                    </div>
+                    <div class="stat-val" id="totalProducts">0</div>
+                    <div class="stat-trend" style="color: #2563EB; font-weight: 600;">লাইভ ক্যাটালগ</div>
+                </div>
+            </div>
+
+            <!-- সাম্প্রতিক অর্ডারসমূহ সেকশন (Lucide Icon সহ) -->
+            <div class="app-sec-header">
+                <h3><i data-lucide="clipboard-list"></i> <span>সাম্প্রতিক অর্ডারসমূহ</span></h3>
+                <a href="javascript:void(0)" onclick="switchTab('ordersPanel', document.querySelectorAll('.bottom-nav-item')[1])" class="btn-view-all">সব দেখুন &rarr;</a>
+            </div>
+            <div class="orders-v-list" id="recentOrdersContainer">
+                <p style="text-align:center; padding: 20px; color:#888;">অর্ডার লোড হচ্ছে...</p>
+            </div>
+
+            <!-- পণ্য ব্যবস্থাপনা সেকশন (Lucide Icon সহ) -->
+            <div class="app-sec-header">
+                <h3><i data-lucide="package"></i> <span>পণ্য ব্যবস্থাপনা</span></h3>
+                <a href="javascript:void(0)" onclick="openProductModal()" class="btn-view-all">+ পণ্য যোগ করুন</a>
+            </div>
+            <div class="products-h-grid" id="recentProductsContainer">
+                <p style="text-align:center; grid-column:1/-1; padding: 20px; color:#888;">পণ্য লোড হচ্ছে...</p>
+            </div>
+        </div>
+
+        <!-- ২. পূর্ণাঙ্গ অর্ডার ব্যবস্থাপনা প্যানেল (হুবহু স্ক্রিনশট) -->
+        <div id="ordersPanel" class="app-panel">
+            <!-- হেডার -->
+            <div class="order-mgmt-header">
+                <div class="order-mgmt-title">
+                    <h2>অর্ডার ব্যবস্থাপনা</h2>
+                    <p>আপনার সকল অর্ডার এক জায়গায়</p>
+                </div>
+                <button onclick="loadOrders()" class="btn-refresh-circle" title="রিফ্রেশ করুন">↻</button>
+            </div>
+
+            <!-- অর্ডারের নিজস্ব ৪টি স্ট্যাটাস মেট্রিক কার্ড (Lucide Icons সহ) -->
+            <div class="stats-grid-modern" style="margin-bottom: 14px;">
+                <!-- ১. মোট অর্ডার -->
+                <div class="stat-card-modern">
+                    <div class="stat-card-header">
+                        <div class="stat-icon-wrap icon-bg-orders">
+                            <i data-lucide="shopping-cart"></i>
+                        </div>
+                        <h4>মোট অর্ডার</h4>
+                    </div>
+                    <div class="stat-val" id="ordStatTotal">0</div>
+                </div>
+
+                <!-- ২. পেন্ডিং -->
+                <div class="stat-card-modern">
+                    <div class="stat-card-header">
+                        <div class="stat-icon-wrap icon-bg-pending">
+                            <i data-lucide="clock"></i>
+                        </div>
+                        <h4>পেন্ডিং</h4>
+                    </div>
+                    <div class="stat-val" id="ordStatPending" style="color:#B45309;">0</div>
+                </div>
+
+                <!-- ৩. কনফার্মড -->
+                <div class="stat-card-modern">
+                    <div class="stat-card-header">
+                        <div class="stat-icon-wrap" style="background:#E0E7FF; color:#3730A3;">
+                            <i data-lucide="check-circle"></i>
+                        </div>
+                        <h4>কনফার্মড</h4>
+                    </div>
+                    <div class="stat-val" id="ordStatConfirmed" style="color:#3730A3;">0</div>
+                </div>
+
+                <!-- ৪. ডেলিভার্ড -->
+                <div class="stat-card-modern">
+                    <div class="stat-card-header">
+                        <div class="stat-icon-wrap" style="background:#DCFCE7; color:#15803D;">
+                            <i data-lucide="package-check"></i>
+                        </div>
+                        <h4>ডেলিভার্ড</h4>
+                    </div>
+                    <div class="stat-val" id="ordStatDelivered" style="color:#15803D;">0</div>
+                </div>
+            </div>
+
+            <!-- লাইভ সার্চ ও ফিল্টার বার (Lucide Icons সহ) -->
+            <div class="order-search-row">
+                <div class="order-search-input-wrap">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="orderSearchInput" placeholder="অর্ডার বা কাস্টমারের নাম খুঁজুন..." oninput="handleOrderSearch(this.value)">
+                </div>
+                <button class="btn-filter-action" onclick="document.getElementById('orderSearchInput').focus()">
+                    <i data-lucide="list-filter" style="width:14px; height:14px;"></i>
+                    <span>ফিল্টার</span>
+                </button>
+            </div>
+
+            <!-- স্ট্যাটাস অনুযায়ী ফিল্টার পিলস মেনু -->
+            <div class="order-status-tabs">
+                <button class="order-tab-btn active" onclick="filterOrdersByStatus('all', this)">সব</button>
+                <button class="order-tab-btn tab-pending" onclick="filterOrdersByStatus('Pending', this)">পেন্ডিং</button>
+                <button class="order-tab-btn tab-confirmed" onclick="filterOrdersByStatus('Confirmed', this)">কনফার্মড</button>
+                <button class="order-tab-btn tab-delivered" onclick="filterOrdersByStatus('Delivered', this)">ডেলিভার্ড</button>
+                <button class="order-tab-btn tab-cancelled" onclick="filterOrdersByStatus('Cancelled', this)">বাতিল</button>
+            </div>
+
+            <!-- অর্ডারের রিয়েল কার্ডগুলোর তালিকা -->
+            <div class="orders-v-list" id="fullOrdersList">
+                <p style="text-align:center; padding: 25px; color:#888;">অর্ডার লোড হচ্ছে...</p>
+            </div>
+        </div>
+
+        <!-- ৩. পূর্ণাঙ্গ পণ্য ব্যবস্থাপনা প্যানেল (Lucide Icons সহ) -->
+        <div id="productsPanel" class="app-panel">
+            <!-- হেডার -->
+            <div class="order-mgmt-header">
+                <div class="order-mgmt-title">
+                    <h2>পণ্য ব্যবস্থাপনা</h2>
+                    <p>আপনার সকল পণ্য এক জায়গায়</p>
+                </div>
+                <button onclick="loadProducts()" class="btn-refresh-circle" title="রিফ্রেশ করুন">↻</button>
+            </div>
+
+            <!-- ৩টি স্ট্যাটাস মেট্রিক কার্ড (রিয়েল ডাটা) -->
+            <div class="prod-top-stats-3">
+                <div class="stat-card-p3">
+                    <div class="p3-icon" style="background:#E8F5E9; color:#15803D;"><i data-lucide="package"></i></div>
+                    <h5>মোট পণ্য</h5>
+                    <div class="p3-num" id="prodStatTotal">0</div>
+                </div>
+                <div class="stat-card-p3">
+                    <div class="p3-icon" style="background:#FFF3E0; color:#B45309;"><i data-lucide="boxes"></i></div>
+                    <h5>স্টকে আছে</h5>
+                    <div class="p3-num" id="prodStatInStock" style="color:#15803D;">0</div>
+                </div>
+                <div class="stat-card-p3">
+                    <div class="p3-icon" style="background:#FEE2E2; color:#DC2626;"><i data-lucide="x-circle"></i></div>
+                    <h5>স্টক শেষ</h5>
+                    <div class="p3-num" id="prodStatOutStock" style="color:#DC2626;">0</div>
+                </div>
+            </div>
+
+            <!-- সার্চ বার -->
+            <div class="order-search-row">
+                <div class="order-search-input-wrap">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="prodSearchInput" placeholder="পণ্যের নাম খুঁজুন..." oninput="handleProdSearch(this.value)">
+                </div>
+                <button class="btn-filter-action" onclick="document.getElementById('prodSearchInput').focus()">
+                    <i data-lucide="list-filter" style="width:14px; height:14px;"></i>
+                    <span>ফিল্টার</span>
+                </button>
+            </div>
+
+            <!-- সারি ১: ক্যাটাগরি ফিল্টার পিলস -->
+            <div class="order-status-tabs" style="margin-bottom: 8px;">
+                <button class="order-tab-btn active" onclick="filterProdByCategory('all', this)"><i data-lucide="package" style="width:12px; height:12px; vertical-align:middle;"></i> সব পণ্য</button>
+                <button class="order-tab-btn" onclick="filterProdByCategory('aam', this)">আম</button>
+                <button class="order-tab-btn" onclick="filterProdByCategory('gur', this)">গুড়</button>
+                <button class="order-tab-btn" onclick="filterProdByCategory('aachar', this)">আচার</button>
+            </div>
+
+            <!-- সারি ২: স্টক ফিল্টার পিলস -->
+            <div class="order-status-tabs">
+                <button class="order-tab-btn active" onclick="filterProdByStock('all', this)">সব</button>
+                <button class="order-tab-btn" onclick="filterProdByStock('inStock', this)"><i data-lucide="check-circle" style="width:12px; height:12px; vertical-align:middle;"></i> স্টকে আছে</button>
+                <button class="order-tab-btn" onclick="filterProdByStock('outStock', this)"><i data-lucide="x-circle" style="width:12px; height:12px; vertical-align:middle;"></i> স্টক শেষ</button>
+            </div>
+
+            <!-- বড় + নতুন পণ্য যোগ করুন বাটন -->
+            <button class="btn-add-prod-banner" onclick="openProductModal()">
+                <i data-lucide="plus-circle"></i> <span>নতুন পণ্য যোগ করুন</span>
+            </button>
+
+            <!-- ২-কলামের আসল পণ্য গ্রিড -->
+            <div class="prod-grid-2col" id="fullProductsList">
+                <p style="text-align:center; grid-column:1/-1; padding: 25px; color:#888;">পণ্য লোড হচ্ছে...</p>
+            </div>
+        </div>
+
+        <!-- ৫. পূর্ণাঙ্গ সাইট সেটিংস প্যানেল (Lucide Icons সহ) -->
+        <div id="settingsPanel" class="app-panel">
+            <!-- হেডার -->
+            <div class="order-mgmt-header">
+                <div class="order-mgmt-title">
+                    <h2>সাইট সেটিংস</h2>
+                    <p>আপনার ওয়েবসাইট পরিচালনা করুন</p>
+                </div>
+                <button onclick="logout()" class="btn-refresh-circle" title="লগআউট" style="color:#EF4444; border-color:#FECACA;"><i data-lucide="log-out"></i></button>
+            </div>
+
+            <!-- সেটিংস কুইক নেভিগেশন পিলস -->
+            <div class="set-nav-tabs">
+                <button type="button" class="set-nav-pill active" onclick="scrollSettingsTo('secGeneral', this)"><i data-lucide="settings"></i> সাধারণ সেটিংস</button>
+                <button type="button" class="set-nav-pill" onclick="scrollSettingsTo('secGeneral', this)"><i data-lucide="store"></i> যোগাযোগের তথ্য</button>
+                <button type="button" class="set-nav-pill" onclick="scrollSettingsTo('secCounters', this)"><i data-lucide="chart-no-axes-column"></i> হোমপেজ কাউন্টার</button>
+                <button type="button" class="set-nav-pill" onclick="scrollSettingsTo('secBanners', this)"><i data-lucide="images"></i> ব্যানার ব্যবস্থাপনা</button>
+                <button type="button" class="set-nav-pill" onclick="scrollSettingsTo('secSecurity', this)"><i data-lucide="shield-check"></i> অ্যাডমিন নিরাপত্তা</button>
+            </div>
+
+            <form id="settingsForm" onsubmit="handleSaveSettings(event)">
+                <!-- কার্ড ১: সাধারণ সেটিংস, লোগো ও যোগাযোগ -->
+                <div class="set-card-box" id="secGeneral">
+                    <div class="set-card-head">
+                        <i data-lucide="settings"></i>
+                        <h4>সাইট লোগো ও সাধারণ সেটিংস</h4>
+                    </div>
+
+                    <!-- নতুন লোগো আপলোড ও লাইভ প্রিভিউ বার -->
+                    <div style="background: #F4FAF6; border: 1.5px dashed #B8DFC4; border-radius: 14px; padding: 14px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 48px; height: 48px; border-radius: 12px; background: #FFF; border: 1.5px solid #D1E7D8; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;" id="logoPreviewBox">
+                                <span style="font-size: 10px; color: #64748B;">লোগো নেই</span>
+                            </div>
+                            <div>
+                                <label style="font-size: 12px; font-weight: 800; color: #0F3826; display: block; margin-bottom: 2px;">সাইটের মূল লোগো পরিবর্তন</label>
+                                <span style="font-size: 11px; color: #64748B;">গ্যালারি থেকে লোগোর ছবি বেছে নিন</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px; flex-grow: 1; justify-content: flex-end;">
+                            <input type="file" id="newLogoFile" accept="image/*" style="font-size: 11.5px; max-width: 170px;">
+                            <button type="button" onclick="uploadSiteLogo()" id="btnUploadLogo" style="background: var(--dark-green); color: #FFF; border: none; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap;">
+                                <span>লোগো আপলোড করুন</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="set-input-grid-2">
+                        <div class="form-group">
+                            <label>টপ নোটিশ বার</label>
+                            <input type="text" id="setAnnouncement" placeholder="যেমন: সারা দেশে ক্যাশ অন ডেলিভারি!">
+                        </div>
+                        <div class="form-group">
+                            <label>ডেলিভারি চার্জ (টাকা) — ফ্রি রাখতে ০ লিখুন</label>
+                            <div class="input-icon-group">
+                                <span class="icon-left"><i data-lucide="truck"></i></span>
+                                <input type="number" id="setDeliveryFee" placeholder="যেমন: 0 অথবা 60">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>ইমেইল এড্রেস</label>
+                            <div class="input-icon-group">
+                                <span class="icon-left"><i data-lucide="store"></i></span>
+                                <input type="email" id="setEmail" placeholder="info@roshoroddur.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>অফিস / বাগানের ঠিকানা</label>
+                            <div class="input-icon-group">
+                                <span class="icon-left"><i data-lucide="map-pin"></i></span>
+                                <input type="text" id="setAddress" placeholder="যেমন: চাঁপাইনবাবগঞ্জ, বাংলাদেশ">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>হেল্পলাইন ফোন নম্বর</label>
+                            <div class="input-icon-group">
+                                <span class="icon-left"><i data-lucide="phone"></i></span>
+                                <input type="text" id="setPhone" placeholder="880171234567">
+                            </div>
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>WhatsApp নম্বর</label>
+                            <div class="input-icon-group">
+                                <span class="icon-left"><i data-lucide="message-circle"></i></span>
+                                <input type="text" id="setWhatsapp" placeholder="880171234567">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- কার্ড ২: হোমপেজ কাউন্টার -->
+                <div class="set-card-box" id="secCounters">
+                    <div class="set-card-head">
+                        <i data-lucide="chart-no-axes-column"></i>
+                        <h4>হোমপেজ কাউন্টার</h4>
+                    </div>
+                    <div class="counter-inputs-grid">
+                        <div class="counter-in-card">
+                            <i data-lucide="package"></i>
+                            <label>১. আম (কেজি)</label>
+                            <input type="number" id="statMango" placeholder="5000">
+                        </div>
+                        <div class="counter-in-card">
+                            <i data-lucide="weight"></i>
+                            <label>২. গুড় (কেজি)</label>
+                            <input type="number" id="statGur" placeholder="2500">
+                        </div>
+                        <div class="counter-in-card">
+                            <i data-lucide="boxes"></i>
+                            <label>৩. আচার (জার)</label>
+                            <input type="number" id="statAachar" placeholder="1200">
+                        </div>
+                        <div class="counter-in-card">
+                            <i data-lucide="user-round"></i>
+                            <label>৪. কারিগর পরিবার</label>
+                            <input type="number" id="statFamily" placeholder="150">
+                        </div>
+                    </div>
+                    <p class="footnote-hint">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        <span>এই তথ্যগুলো সরাসরি হোমপেজের কাউন্টারে প্রদর্শিত হবে।</span>
+                    </p>
+                </div>
+
+                <!-- কার্ড ৩: হিরো ব্যানার ব্যবস্থাপনা -->
+                <div class="set-card-box" id="secBanners">
+                    <div class="set-card-head">
+                        <i data-lucide="images"></i>
+                        <h4>হিরো ব্যানার ব্যবস্থাপনা</h4>
+                    </div>
+                    <div class="banner-upload-bar">
+                        <i data-lucide="image-plus" style="color:#6B7280; width:18px; height:18px;"></i>
+                        <input type="file" id="newBannerFile" accept="image/*">
+                        <button type="button" onclick="uploadNewBanner()" id="btnUploadBanner" class="btn-add-banner-pill"><i data-lucide="plus-circle"></i> ব্যানার যোগ করুন</button>
+                    </div>
+                    <div id="bannersListPreview" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                        <small style="color:#888;">ব্যানার লোড হচ্ছে...</small>
+                    </div>
+                </div>
+
+                <!-- কার্ড ৪: অ্যাডমিন নিরাপত্তা -->
+                <div class="set-card-box" id="secSecurity">
+                    <div class="set-card-head">
+                        <i data-lucide="shield-check"></i>
+                        <h4>অ্যাডমিন নিরাপত্তা</h4>
+                    </div>
+                    <div class="security-badge">
+                        <span><i data-lucide="check-circle"></i></span> <span>বর্তমান নিরাপত্তা অবস্থা: নিরাপদ</span>
+                    </div>
+
+                    <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:12px;">
+                        <div class="input-icon-group">
+                            <span class="icon-left"><i data-lucide="lock-keyhole"></i></span>
+                            <input type="password" id="currAdminPin" placeholder="বর্তমান PIN">
+                            <span class="eye-toggle" onclick="togglePinVisibility('currAdminPin', this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </span>
+                        </div>
+                        <div class="input-icon-group">
+                            <span class="icon-left"><i data-lucide="lock-keyhole"></i></span>
+                            <input type="password" id="newAdminPin" placeholder="নতুন PIN">
+                            <span class="eye-toggle" onclick="togglePinVisibility('newAdminPin', this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </span>
+                        </div>
+                        <div class="input-icon-group">
+                            <span class="icon-left"><i data-lucide="lock-keyhole"></i></span>
+                            <input type="password" id="confirmAdminPin" placeholder="নতুন PIN নিশ্চিত করুন">
+                            <span class="eye-toggle" onclick="togglePinVisibility('confirmAdminPin', this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </span>
+                        </div>
+                        <button type="button" onclick="changeAdminPin()" class="btn-add-banner-pill" style="padding:10px; width:100%; font-size:13px; text-align:center;"><i data-lucide="pencil"></i> PIN পরিবর্তন করুন</button>
+                    </div>
+                    <p class="footnote-hint">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        <span>আপনার অ্যাডমিন প্যানেল সুরক্ষিত রাখুন।</span>
+                    </p>
+                </div>
+
+                <!-- বড় সেভ বাটন -->
+                <button type="submit" class="btn-save-settings-main" id="saveSettingsBtn">
+                    <i data-lucide="save"></i> <span>সেটিংস সংরক্ষণ করুন</span>
+                </button>
+                <a href="javascript:void(0)" onclick="cancelSettingsChanges()" class="btn-cancel-link">পরিবর্তন বাতিল করুন</a>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- Floating Action Button (+ নতুন পণ্য যোগ) -->
+    <button class="fab-modern" onclick="openProductModal()">
+        <span>+ নতুন পণ্য যোগ</span>
+    </button>
+
+    <!-- Bottom App Navigation Bar (Lucide Icons সহ) -->
+    <nav class="bottom-nav-bar">
+        <button class="bottom-nav-item active" onclick="switchTab('dashboardPanel', this)">
+            <i data-lucide="house" class="nav-icon"></i>
+            <span>ড্যাশবোর্ড</span>
+        </button>
+        <button class="bottom-nav-item" onclick="switchTab('ordersPanel', this)">
+            <i data-lucide="clipboard-list" class="nav-icon"></i>
+            <span>অর্ডার</span>
+        </button>
+        <button class="bottom-nav-item" onclick="switchTab('productsPanel', this)">
+            <i data-lucide="package" class="nav-icon"></i>
+            <span>পণ্য</span>
+        </button>
+        
+        <button class="bottom-nav-item" onclick="switchTab('settingsPanel', this)">
+            <i data-lucide="settings" class="nav-icon"></i>
+            <span>সেটিংস</span>
+        </button>
+    </nav>
+
+    <!-- Modal: নতুন পণ্য যোগ -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 style="display:flex; align-items:center; gap:8px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                    <span>নতুন পণ্য যোগ করুন</span>
+                </h3>
+                <button class="modal-close" onclick="closeProductModal()">✕</button>
+            </div>
+            <form id="addProductForm" onsubmit="handleAddProduct(event)">
+                <div class="form-group">
+                    <label>পণ্যের নাম</label>
+                    <input type="text" id="prodName" placeholder="যেমন: হিমসাগর আম" required>
+                </div>
+                <div class="form-group">
+                    <label>ক্যাটাগরি</label>
+                    <select id="prodCategory" required>
+                        <option value="aam">আম</option>
+                        <option value="gur">গুড়</option>
+                        <option value="aachar">আচার</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>বর্তমান বিক্রয় মূল্য (টাকা)</label>
+                    <input type="number" id="prodPrice" placeholder="যেমন: ৫২০" required>
+                </div>
+                <div class="form-group">
+                    <label>পূর্বের/রেগুলার মূল্য (টাকা) - ডিসকাউন্ট দেখানোর জন্য</label>
+                    <input type="number" id="prodRegularPrice" placeholder="যেমন: ৬২০ (না থাকলে খালি রাখুন)">
+                </div>
+                <div class="form-group">
+                    <label>পরিমাপ / ইউনিট</label>
+                    <input type="text" id="prodUnit" placeholder="যেমন: ২ কেজি বা ১ জার" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>পণ্যের ছবি (গ্যালারি থেকে)</label>
+                    <input type="file" id="prodImageFile" accept="image/*" required>
+                </div>
+                <div class="form-group">
+                    <label>বিবরণ</label>
+                    <textarea id="prodDesc" rows="2" placeholder="পণ্য সম্পর্কে লিখুন..." required></textarea>
+                </div>
+                <button type="submit" class="btn-submit-modal" id="saveProdBtn">পণ্য সংরক্ষণ করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: অর্ডারের পূর্ণাঙ্গ বিস্তারিত দেখার প্রিমিয়াম পপআপ (হাই-প্রায়োরিটি ফিক্সড) -->
+    <div class="modal-overlay" id="adminOrderDetailModal" style="position: fixed !important; inset: 0 !important; z-index: 999999 !important; background: rgba(0,0,0,0.65) !important;">
+        <div class="modal-card" style="max-width: 480px; width: 100%; padding: 20px; margin: auto; max-height: 90vh; overflow-y: auto;">
+            <div class="modal-header" style="border-bottom: 1px solid #E5E7EB; padding-bottom: 12px; margin-bottom: 14px;">
+                <h3 style="font-size: 16px; font-weight: 800; color: #111827; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="package-check" style="color: var(--primary-green); width: 20px; height: 20px;"></i>
+                    <span>অর্ডারের পূর্ণাঙ্গ বিস্তারিত</span>
+                </h3>
+                <button class="modal-close" onclick="closeAdminOrderDetailModal()">✕</button>
+            </div>
+            
+            <div id="adminOrderDetailContent">
+                <!-- ডাইনামিক তথ্য জাভাস্ক্রিপ্ট থেকে বসবে -->
+            </div>
+
+            <button type="button" class="btn-submit-modal" onclick="closeAdminOrderDetailModal()" style="margin-top: 14px; background: #374151;">
+                <span>বন্ধ করুন</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK & Controller Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { 
+            getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy, deleteField 
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        // ফায়ারবেস স্টোরেজ ইমপোর্ট ও ডিলিট মেথড যুক্ত করা হলো
+        import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA78cU_-fel3Wk_KBPURwFIL1clPaVHvSw",
+            authDomain: "ritubij-13e90.firebaseapp.com",
+            projectId: "ritubij-13e90",
+            storageBucket: "ritubij-13e90.firebasestorage.app",
+            messagingSenderId: "668075804350",
+            appId: "1:668075804350:web:1d3744b8e269a0aaef40ef",
+            measurementId: "G-WCVW3V06VW"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app); // স্টোরেজ সক্রিয় করা হলো
+
+        // ছবি ১০৮০p ফুল এইচডি রেজোলিউশনে রূপান্তরের ফাংশন
+        function compressImageToBlob(file, maxWidth = 1080, quality = 0.85) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > maxWidth) {
+                                height = Math.round((height * maxWidth) / width);
+                                width = maxWidth;
+                            }
+                        } else {
+                            if (height > maxWidth) {
+                                width = Math.round((width * maxWidth) / height);
+                                height = maxWidth;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        // সর্বোচ্চ শার্পনেস নিশ্চিত করতে হাই-কোয়ালিটি স্মুথিং
+                        ctx.imageSmoothingEnabled = true;
+                        ctx.imageSmoothingQuality = "high";
+                        ctx.drawImage(img, 0, 0, width, height);
+                        canvas.toBlob((blob) => resolve(blob), 'image/jpeg', quality);
+                    };
+                    img.onerror = (err) => reject(err);
+                };
+                reader.onerror = (err) => reject(err);
+            });
+        }
+
+        // ছবি ১০৮০p Full HD তে প্রসেস করে স্টোরেজে আপলোড করার ফাংশন
+        async function uploadImageAndGetURL(file, folder = "products") {
+            // ব্যানারের জন্য ১৯২০p (১০৮০p ওয়াইডস্ক্রিন) এবং পণ্যের জন্য ১০৮০p ফুল এইচডি
+            const targetWidth = folder === "banners" ? 1920 : 1080;
+            const blob = await compressImageToBlob(file, targetWidth, 0.85);
+            try {
+                const fileName = `${folder}/${Date.now()}_${Math.random().toString(36).substring(2, 7)}.jpg`;
+                const fileRef = ref(storage, fileName);
+                await uploadBytes(fileRef, blob);
+                return await getDownloadURL(fileRef);
+            } catch (storageErr) {
+                console.warn("স্টোরেজ আপলোড সতর্কবার্তা, ফলব্যাক সক্রিয়:", storageErr);
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(blob);
+                });
+            }
+        }
+
+        // SHA-256 এনক্রিপ্ট করার ফাংশন (পাসওয়ার্ড নিরাপদ রাখার জন্য) [1]
+        async function hashPin(pin) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(pin.trim());
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // ডিফল্ট পিন "admin123" এর সুরক্ষিত হ্যাশ
+        let currentAdminPinHash = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
+        let existingSettings = {};
+
+        function compressImage(file, maxWidth = 600, quality = 0.72) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > maxWidth) {
+                                height = Math.round((height * maxWidth) / width);
+                                width = maxWidth;
+                            }
+                        } else {
+                            if (height > maxWidth) {
+                                width = Math.round((width * maxWidth) / height);
+                                height = maxWidth;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.onerror = (err) => reject(err);
+                };
+                reader.onerror = (err) => reject(err);
+            });
+        }
+
+        // আলাদা গোপন ডকুমেন্ট থেকে সুরক্ষিত পিন লোড করা
+        async function loadStoredPin() {
+            try {
+                const authDoc = await getDoc(doc(db, "settings", "admin_auth"));
+                if (authDoc.exists() && authDoc.data().pinHash) {
+                    currentAdminPinHash = authDoc.data().pinHash;
+                } else {
+                    const oldDoc = await getDoc(doc(db, "settings", "general"));
+                    if(oldDoc.exists() && oldDoc.data().adminPin) {
+                        const migrated = await hashPin(oldDoc.data().adminPin);
+                        await setDoc(doc(db, "settings", "admin_auth"), { pinHash: migrated });
+                        currentAdminPinHash = migrated;
+                        await updateDoc(doc(db, "settings", "general"), { adminPin: deleteField() });
+                    }
+                }
+            } catch(e) {}
+        }
+        loadStoredPin();
+
+        // হ্যাশ মিলিয়ে নিরাপদ লগইন
+        window.checkLogin = async function() {
+            const pinInput = document.getElementById("adminPin");
+            const errorText = document.getElementById("loginError");
+            const pin = pinInput.value.trim();
+
+            if(!pin) return;
+
+            const enteredHash = await hashPin(pin);
+
+            if(enteredHash === currentAdminPinHash) {
+                sessionStorage.setItem("adminAuth", "true");
+                document.getElementById("loginScreen").style.display = "none";
+                errorText.style.display = "none";
+                initAdmin();
+            } else {
+                errorText.style.display = "block";
+                pinInput.focus();
+            }
+        };
+
+        window.logout = function() {
+            sessionStorage.removeItem("adminAuth");
+            location.reload();
+        };
+
+        window.switchTab = function(panelId, btn) {
+            document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.app-panel').forEach(p => p.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            const panel = document.getElementById(panelId);
+            if(panel) panel.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.openProductModal = function() { document.getElementById("productModal").classList.add("active"); };
+        window.closeProductModal = function() { document.getElementById("productModal").classList.remove("active"); };
+
+        function initAdmin() {
+            loadOrders();
+            loadProducts();
+            loadSettings();
+            loadBanners();
+        }
+
+        window.uploadNewBanner = async function() {
+            const fileInput = document.getElementById("newBannerFile");
+            const btn = document.getElementById("btnUploadBanner");
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert("দয়া করে একটি ব্যানারের ছবি সিলেক্ট করুন!");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "আপলোড হচ্ছে...";
+
+            try {
+                // ফায়ারবেস স্টোরেজ থেকে হালকা লিংক তৈরি করে সেভ করা
+                const bannerUrl = await uploadImageAndGetURL(fileInput.files[0], "banners");
+                await addDoc(collection(db, "banners"), {
+                    image: bannerUrl,
+                    createdAt: serverTimestamp()
+                });
+                alert("নতুন ব্যানার সফলভাবে যোগ হয়েছে! ✅");
+                fileInput.value = "";
+                loadBanners();
+            } catch(e) {
+                alert("ব্যানার আপলোড ব্যর্থ: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "+ ব্যানার যোগ";
+            }
+        };
+
+        async function loadBanners() {
+            const container = document.getElementById("bannersListPreview");
+            if(!container) return;
+            container.innerHTML = "<small style='color:#888;'>ব্যানার লোড হচ্ছে...</small>";
+
+            try {
+                let html = "";
+                let count = 0;
+
+                const sDoc = await getDoc(doc(db, "settings", "general"));
+                if (sDoc.exists()) {
+                    const sData = sDoc.data();
+                    ['banner1', 'banner2', 'banner3'].forEach(key => {
+                        if (sData[key]) {
+                            count++;
+                            html += `
+                                <div style="position:relative; width:90px; height:55px; border-radius:8px; overflow:hidden; border:2px solid #F59E0B; box-shadow:0 1px 3px rgba(0,0,0,0.1);" title="আগের ব্যানার">
+                                    <img src="${sData[key]}" style="width:100%; height:100%; object-fit:cover;">
+                                    <button onclick="deleteOldBanner('${key}')" title="ফায়ারবেস থেকে চিরতরে মুছুন" style="position:absolute; top:2px; right:2px; background:#DC2626; color:#FFF; border:none; border-radius:50%; width:20px; height:20px; font-size:11px; cursor:pointer; font-weight:bold; line-height:1;">✕</button>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+
+                try {
+                    const snap = await getDocs(collection(db, "banners"));
+                    snap.forEach(docSnap => {
+                        count++;
+                        const b = docSnap.data();
+                        const id = docSnap.id;
+                        html += `
+                            <div style="position:relative; width:90px; height:55px; border-radius:8px; overflow:hidden; border:1px solid #D1D5DB; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+                                <img src="${b.image}" style="width:100%; height:100%; object-fit:cover;">
+                                <button onclick="deleteBanner('${id}')" title="ফায়ারবেস থেকে চিরতরে মুছুন" style="position:absolute; top:2px; right:2px; background:#DC2626; color:#FFF; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; display:flex; align-items:center; justify-content:center;"><i data-lucide="trash-2" style="width:11px; height:11px; color:#FFF;"></i></button>
+                            </div>
+                        `;
+                    });
+                } catch(colErr) {}
+
+                if (count === 0) {
+                    container.innerHTML = `<small style="color:#888;">কোনো ব্যানার নেই।</small>`;
+                } else {
+                    container.innerHTML = html;
+                }
+            } catch(e) {
+                container.innerHTML = `<small style='color:red;'>ব্যানার লোড ব্যর্থ।</small>`;
+            }
+        }
+
+        window.deleteBanner = async function(id) {
+            if(confirm("এই ব্যানারটি ফায়ারবেস থেকে চিরতরে মুছে ফেলতে চান?")) {
+                await deleteDoc(doc(db, "banners", id));
+                loadBanners();
+            }
+        };
+
+        window.deleteOldBanner = async function(bannerKey) {
+            if(confirm("আগের এই ব্যানারটি ফায়ারবেস থেকে চিরতরে মুছে জায়গা খালি করতে চান?")) {
+                try {
+                    await updateDoc(doc(db, "settings", "general"), { [bannerKey]: deleteField() });
+                    loadBanners();
+                } catch(err) {
+                    alert("ডিলিট ব্যর্থ: " + err.message);
+                }
+            }
+        };
+
+        function formatWaNumber(phone) {
+            if(!phone) return "";
+            let cleaned = phone.replace(/[^0-9]/g, '');
+            if(cleaned.startsWith('880')) return cleaned;
+            if(cleaned.startsWith('0')) return '88' + cleaned;
+            return '88' + cleaned;
+        }
+
+        let allOrdersMasterData = [];
+        let currentFilterStatus = 'all';
+
+        // ১. রিয়েল অর্ডার লোড ও স্ক্রিনশটের মতো ৪ বাটনসহ কার্ড রেন্ডার (নিরাপদ ও ক্র্যাশ-প্রুফ)
+        async function loadOrders() {
+            const recentContainer = document.getElementById("recentOrdersContainer");
+            const fullContainer = document.getElementById("fullOrdersList");
+
+            if(recentContainer) recentContainer.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">অর্ডার লোড হচ্ছে...</p>`;
+            if(fullContainer) fullContainer.innerHTML = `<p style="text-align:center; padding:25px; color:#888;">অর্ডার লোড হচ্ছে...</p>`;
+
+            try {
+                let snapshot;
+                try {
+                    // প্রথমে তারিখ অনুযায়ী ইনডেক্সড কুয়েরি চেষ্টা করবে
+                    const q = query(collection(db, "orders"), orderBy("orderDate", "desc"));
+                    snapshot = await getDocs(q);
+                } catch(queryErr) {
+                    console.warn("ইনডেক্সিং এরর বা তারিখ অনুপস্থিত, ফলব্যাক কুয়েরি রান হচ্ছে:", queryErr);
+                    // ইনডেক্সিং সমস্যা হলে সরাসরি সব অর্ডার এনে মেমোরিতে সর্ট করবে
+                    snapshot = await getDocs(collection(db, "orders"));
+                }
+
+                allOrdersMasterData = [];
+                let total = 0, pending = 0, confirmed = 0, delivered = 0, sales = 0;
+
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const id = docSnap.id;
+                    total++;
+
+                    const status = (data.status || "Pending");
+                    if(status === "Pending") pending++;
+                    if(status === "Confirmed") confirmed++;
+                    if(status === "Delivered") delivered++;
+                    if(status !== "Cancelled") sales += (Number(data.totalPrice) || 0);
+
+                    allOrdersMasterData.push({ id, ...data });
+                });
+
+                // নতুন অর্ডারগুলো সবসময় উপরে দেখানোর জন্য মেমোরি সর্টিং (Fallback safety)
+                allOrdersMasterData.sort((a, b) => {
+                    const timeA = a.orderDate?.seconds ? a.orderDate.seconds * 1000 : (new Date(a.orderDate || 0)).getTime();
+                    const timeB = b.orderDate?.seconds ? b.orderDate.seconds * 1000 : (new Date(b.orderDate || 0)).getTime();
+                    return timeB - timeA;
+                });
+
+                // ড্যাশবোর্ডের মেট্রিক আপডেট
+                if(document.getElementById("totalOrders")) document.getElementById("totalOrders").innerText = total.toLocaleString('bn-BD');
+                if(document.getElementById("pendingOrders")) document.getElementById("pendingOrders").innerText = pending.toLocaleString('bn-BD');
+                if(document.getElementById("totalSales")) document.getElementById("totalSales").innerText = `৳ ${sales.toLocaleString('bn-BD')}`;
+                if(document.getElementById("topBellBadge")) document.getElementById("topBellBadge").innerText = pending.toLocaleString('bn-BD');
+
+                // অর্ডার পেজের ৪টি কাউন্টার আপডেট
+                if(document.getElementById("ordStatTotal")) document.getElementById("ordStatTotal").innerText = total.toLocaleString('bn-BD');
+                if(document.getElementById("ordStatPending")) document.getElementById("ordStatPending").innerText = pending.toLocaleString('bn-BD');
+                if(document.getElementById("ordStatConfirmed")) document.getElementById("ordStatConfirmed").innerText = confirmed.toLocaleString('bn-BD');
+                if(document.getElementById("ordStatDelivered")) document.getElementById("ordStatDelivered").innerText = delivered.toLocaleString('bn-BD');
+
+                // স্ক্রিনে কার্ড রেন্ডার করা
+                renderOrdersView(allOrdersMasterData);
+
+            } catch (err) {
+                console.error("Orders load critical error:", err);
+                const errorHtml = `
+                    <div style="text-align:center; padding:30px 15px; color:#DC2626;">
+                        <p style="font-weight:700; margin-bottom:8px;">⚠️ অর্ডারের তথ্য লোড হতে সমস্যা হয়েছে!</p>
+                        <p style="font-size:12px; color:#6B7280; margin-bottom:12px;">ইন্টারনেট বা ফায়ারবেস কানেকশন পরীক্ষা করুন।</p>
+                        <button onclick="loadOrders()" style="background:#11694E; color:#FFF; border:none; padding:7px 18px; border-radius:12px; font-weight:700; cursor:pointer;">আবার চেষ্টা করুন ↻</button>
+                    </div>
+                `;
+                if(recentContainer) recentContainer.innerHTML = errorHtml;
+                if(fullContainer) fullContainer.innerHTML = errorHtml;
+            }
+        }
+        window.loadOrders = loadOrders;
+
+// কার্ড রেন্ডারিং ফাংশন (ক্লিন ও কম্প্যাক্ট কার্ড সহ)
+        function renderOrdersView(ordersList) {
+            const recentContainer = document.getElementById("recentOrdersContainer");
+            const fullContainer = document.getElementById("fullOrdersList");
+
+            if(!ordersList || ordersList.length === 0) {
+                const emptyMsg = `<p style="text-align:center; padding:30px; color:#9CA3AF;">কোনো অর্ডার পাওয়া যায়নি।</p>`;
+                if(recentContainer) recentContainer.innerHTML = emptyMsg;
+                if(fullContainer) fullContainer.innerHTML = emptyMsg;
+                return;
+            }
+
+            const defaultImg = "https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=150&q=80";
+
+            const html = ordersList.map((data, index) => {
+                const statusKey = (data.status || 'pending').toLowerCase();
+                const statusClass = `status-bg-${statusKey}`;
+                const statusLabel = {
+                    'pending': 'পেন্ডিং',
+                    'confirmed': 'কনফার্মড',
+                    'delivered': 'ডেলিভার্ড',
+                    'cancelled': 'বাতিল'
+                }[statusKey] || 'পেন্ডিং';
+
+                const cleanWa = formatWaNumber(data.customerPhone);
+                const realOrderNumber = data.orderNumber || `RR-2026-${(1000 + index)}`;
+
+                let dateStr = "তারিখ পাওয়া যায়নি";
+                if(data.orderDate && data.orderDate.toDate) {
+                    const d = data.orderDate.toDate();
+                    dateStr = d.toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' }) + ", " + d.toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' });
+                }
+
+                // একাধিক পণ্য থাকলে কার্ডে ছোট সামারি দেখাবে (কার্ড অযথা বড় হবে না)
+                const isCombo = data.cartItems && data.cartItems.length > 0;
+                const previewImg = isCombo ? (data.cartItems[0].image || defaultImg) : (data.productImage || defaultImg);
+                const previewTitle = isCombo ? `সম্মিলিত অর্ডার (${data.cartItems.length}টি পণ্য)` : data.productName;
+                const previewQty = isCombo ? `${data.cartItems.length}টি আইটেম` : `${data.quantity || 1} ${data.unit || 'কেজি'}`;
+
+                return `
+                    <div class="order-box-v2">
+                        <!-- সারি ১: অর্ডার নম্বর, তারিখ ও ডিলিট বাটন -->
+                        <div class="order-head-v2">
+                            <div>
+                                <div class="order-id-txt" style="display:flex; align-items:center; gap:6px;">
+                                    <i data-lucide="clipboard-list"></i>
+                                    <span>#${realOrderNumber}</span>
+                                </div>
+                                <div class="order-date-txt"><i data-lucide="calendar-days"></i> ${dateStr}</div>
+                            </div>
+                            <div class="order-head-right">
+                                <span class="status-pill-badge ${statusClass}">${statusLabel}</span>
+                                <button onclick="deleteOrder('${data.id}')" class="btn-trash-icon" title="অর্ডার ডিলিট"><i data-lucide="trash-2"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- সারি ২: কাস্টমার পরিচিতি -->
+                        <div class="order-cust-v2">
+                            <div class="order-cust-avatar"><i data-lucide="user-round"></i></div>
+                            <div class="order-cust-details">
+                                <h4>${data.customerName || 'নামহীন কাস্টমার'}</h4>
+                                <p><i data-lucide="phone"></i> ${data.customerPhone || 'নম্বর নেই'}</p>
+                                <p><i data-lucide="map-pin"></i> ${data.deliveryAddress || 'ঠিকানা দেওয়া হয়নি'}</p>
+                            </div>
+                        </div>
+
+                        <!-- সারি ৩: ক্লিন পণ্য প্রিভিউ (অযথা বড় হবে না) -->
+                        <div class="order-prod-row-v2" onclick="showOrderDetails('${data.id}')" style="cursor: pointer; justify-content: space-between;" title="সম্পূর্ণ তালিকা দেখতে ক্লিক করুন">
+                            <div class="prod-left-side">
+                                <img src="${previewImg}" alt="Product" style="width: 44px; height: 44px; border-radius: 10px; object-fit: cover;">
+                                <div class="prod-info-v2">
+                                    <h5 style="font-size: 13px;">${previewTitle}</h5>
+                                    <p style="color: var(--primary-green); font-weight: 700;">${previewQty} ${isCombo ? '• (তালিকা দেখুন)' : ''}</p>
+                                </div>
+                            </div>
+                            <div class="prod-pricing-v2">
+                                <div class="total-lbl">মোট বিল</div>
+                                <div class="total-amount">৳ ${(Number(data.totalPrice) || 0).toLocaleString('bn-BD')}</div>
+                            </div>
+                        </div>
+
+                        <!-- সারি ৪: ৪টি অ্যাকশন বাটন -->
+                        <div class="order-action-grid-4">
+                            <a href="tel:${data.customerPhone}" class="btn-act-v2 btn-act-call"><i data-lucide="phone"></i> কল</a>
+                            <a href="https://wa.me/${cleanWa}?text=${encodeURIComponent('আসসালামু আলাইকুম, ঋতুবীজ থেকে আপনার অর্ডার #' + realOrderNumber + ' প্রসঙ্গে যোগাযোগ করছি।')}" target="_blank" class="btn-act-v2 btn-act-wa"><i data-lucide="message-circle"></i> WhatsApp</a>
+                            <select class="select-status-v2" onchange="updateOrderStatus('${data.id}', this.value)">
+                                <option value="" disabled selected>স্ট্যাটাস ⌵</option>
+                                <option value="Pending" ${data.status==='Pending'?'selected':''}>পেন্ডিং</option>
+                                <option value="Confirmed" ${data.status==='Confirmed'?'selected':''}>কনফার্মড</option>
+                                <option value="Delivered" ${data.status==='Delivered'?'selected':''}>ডেলিভার্ড</option>
+                                <option value="Cancelled" ${data.status==='Cancelled'?'selected':''}>বাতিল</option>
+                            </select>
+                            <button onclick="showOrderDetails('${data.id}')" class="btn-act-v2 btn-act-detail">বিস্তারিত 🔍</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            if(recentContainer) recentContainer.innerHTML = html;
+            if(fullContainer) fullContainer.innerHTML = html;
+
+            if(window.lucide) lucide.createIcons();
+        }
+
+        // লাইভ সার্চ ফিল্টারিং
+        window.handleOrderSearch = function(queryText) {
+            const q = queryText.trim().toLowerCase();
+            if(!q) {
+                renderOrdersView(currentFilterStatus === 'all' ? allOrdersMasterData : allOrdersMasterData.filter(o => o.status === currentFilterStatus));
+                return;
+            }
+            const filtered = allOrdersMasterData.filter(o => 
+                (o.orderNumber && o.orderNumber.toLowerCase().includes(q)) ||
+                (o.customerName && o.customerName.toLowerCase().includes(q)) ||
+                (o.customerPhone && o.customerPhone.includes(q)) ||
+                (o.productName && o.productName.toLowerCase().includes(q)) ||
+                (o.deliveryAddress && o.deliveryAddress.toLowerCase().includes(q))
+            );
+            renderOrdersView(filtered);
+        };
+
+        // বিস্তারিত দেখার আধুনিক পপআপ (Alert-এর বদলে প্রিমিয়াম ডিজাইন)
+        window.showOrderDetails = function(orderId) {
+            const ord = allOrdersMasterData.find(o => o.id === orderId);
+            if(!ord) return;
+
+            const modal = document.getElementById("adminOrderDetailModal");
+            const content = document.getElementById("adminOrderDetailContent");
+            if(!modal || !content) return;
+
+            const defaultImg = "https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=150&q=80";
+
+            // তারিখ সরাসরি বাংলায় সুন্দর ফরম্যাট করা
+            let dateStr = "তথ্য নেই";
+            if(ord.orderDate) {
+                const d = ord.orderDate.toDate ? ord.orderDate.toDate() : new Date(ord.orderDate);
+                if(!isNaN(d.getTime())) {
+                    dateStr = d.toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' }) + ", " + d.toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' });
+                }
+            }
+
+            // সব পণ্যের সুন্দর তালিকা তৈরি করা
+            let itemsHtml = "";
+            if (ord.cartItems && ord.cartItems.length > 0) {
+                itemsHtml = ord.cartItems.map(item => `
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px dashed #E5E7EB;">
+                        <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                            <img src="${item.image || defaultImg}" style="width: 48px; height: 48px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: #F3F4F6;">
+                            <div style="min-width: 0;">
+                                <h5 style="font-size: 13.5px; font-weight: 700; color: #111827; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</h5>
+                                <p style="font-size: 11.5px; color: #6B7280;">${item.quantity} ${item.unit || 'কেজি'} × ৳ ${Number(item.price).toLocaleString('bn-BD')}</p>
+                            </div>
+                        </div>
+                        <span style="font-size: 14px; font-weight: 800; color: #111827; white-space: nowrap;">৳ ${(Number(item.price) * Number(item.quantity)).toLocaleString('bn-BD')}</span>
+                    </div>
+                `).join('');
+            } else {
+                itemsHtml = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 0;">
+                        <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                            <img src="${ord.productImage || defaultImg}" style="width: 48px; height: 48px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: #F3F4F6;">
+                            <div style="min-width: 0;">
+                                <h5 style="font-size: 13.5px; font-weight: 700; color: #111827; margin-bottom: 2px;">${ord.productName || 'পণ্য'}</h5>
+                                <p style="font-size: 11.5px; color: #6B7280;">${ord.quantity || 1} ${ord.unit || 'কেজি'} × ৳ ${(Number(ord.unitPrice) || (ord.totalPrice/(ord.quantity||1)) || 0).toLocaleString('bn-BD')}</p>
+                            </div>
+                        </div>
+                        <span style="font-size: 14px; font-weight: 800; color: #111827; white-space: nowrap;">৳ ${(Number(ord.totalPrice) || 0).toLocaleString('bn-BD')}</span>
+                    </div>
+                `;
+            }
+
+            content.innerHTML = `
+                <!-- ১. অর্ডার পরিচিতি ও স্ট্যাটাস -->
+                <div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; padding: 12px; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <span style="font-size: 14px; font-weight: 800; color: var(--primary-green);">#${ord.orderNumber || ''}</span>
+                        <span style="font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 8px; background: #FEF3C7; color: #B45309;">${ord.status || 'Pending'}</span>
+                    </div>
+                    <p style="font-size: 11px; color: #6B7280;">অর্ডার তারিখ: ${dateStr}</p>
+                </div>
+
+                <!-- ২. পণ্যের বিস্তারিত লিস্ট -->
+                <div style="background: #FFF; border: 1px solid #E5E7EB; border-radius: 14px; padding: 6px 12px; margin-bottom: 12px;">
+                    <p style="font-size: 11.5px; font-weight: 800; color: #111827; margin-bottom: 4px; border-bottom: 1px solid #F3F4F6; padding-bottom: 4px;">অর্ডারকৃত পণ্যের তালিকা:</p>
+                    ${itemsHtml}
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; margin-top: 4px; font-weight: 800; font-size: 14px; color: var(--primary-green);">
+                        <span>সর্বমোট প্রদেয় বিল:</span>
+                        <span style="font-size: 16px; color: #E63946;">৳ ${(Number(ord.totalPrice) || 0).toLocaleString('bn-BD')}</span>
+                    </div>
+                </div>
+
+                <!-- ৩. কাস্টমার ও ডেলিভারি তথ্য -->
+                <div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; padding: 12px; font-size: 12px; line-height: 1.7;">
+                    <p style="margin-bottom: 3px;"><strong>কাস্টমার:</strong> ${ord.customerName || 'তথ্য নেই'}</p>
+                    <p style="margin-bottom: 3px;"><strong>মোবাইল:</strong> <a href="tel:${ord.customerPhone}" style="color: var(--primary-green); text-decoration: none; font-weight: 700;">${ord.customerPhone || 'তথ্য নেই'}</a></p>
+                    <p style="margin-bottom: 3px;"><strong>ঠিকানা:</strong> ${ord.deliveryAddress || 'তথ্য নেই'}</p>
+                    <p><strong>পেমেন্ট:</strong> ক্যাশ অন ডেলিভারি (পণ্য পেয়ে পরিশোধ)</p>
+                </div>
+            `;
+
+            modal.classList.add("active");
+            modal.style.display = "flex"; // গ্যারান্টিযুক্ত ওপেন নিশ্চিতকরণ
+            if(window.lucide) lucide.createIcons();
+        };
+
+        window.closeAdminOrderDetailModal = function() {
+            const m = document.getElementById("adminOrderDetailModal");
+            if(m) {
+                m.classList.remove("active");
+                m.style.display = "none";
+            }
+        };
+
+        window.updateOrderStatus = async function(id, status) {
+            await updateDoc(doc(db, "orders", id), { status });
+            loadOrders();
+        };
+
+        window.deleteOrder = async function(id) {
+            if(confirm("অর্ডারটি মুছে ফেলতে চান?")) {
+                await deleteDoc(doc(db, "orders", id));
+                loadOrders();
+            }
+        };
+
+        // পণ্যের ছবি ক্রিস্টাল ক্লিয়ার ১০৮০p ফুল এইচডিতে রূপান্তরের ফাংশন
+        function convertProductFileToFastData(file) {
+            return new Promise((resolve, reject) => {
+                const timeoutId = setTimeout(() => {
+                    reject(new Error("ছবির সাইজ অনেক বড় অথবা প্রসেসিংয়ে দেরি হচ্ছে।"));
+                }, 10000);
+
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const img = new Image();
+                    img.onload = function() {
+                        clearTimeout(timeoutId);
+                        try {
+                            const canvas = document.createElement("canvas");
+                            let maxDim = 1080; // ক্রিস্টাল ক্লিয়ার ১০৮০p ফুল এইচডি রেজোলিউশন
+                            let w = img.width;
+                            let h = img.height;
+                            if (w > h) {
+                                if (w > maxDim) { h = Math.round((h * maxDim) / w); w = maxDim; }
+                            } else {
+                                if (h > maxDim) { w = Math.round((w * maxDim) / h); h = maxDim; }
+                            }
+                            canvas.width = w;
+                            canvas.height = h;
+                            const ctx = canvas.getContext("2d");
+                            // সর্বোচ্চ শার্পনেস নিশ্চিত করতে হাই-কোয়ালিটি স্মুথিং
+                            ctx.imageSmoothingEnabled = true;
+                            ctx.imageSmoothingQuality = "high";
+                            ctx.drawImage(img, 0, 0, w, h);
+                            resolve(canvas.toDataURL("image/jpeg", 0.85)); // ৮৫% প্রিমিয়াম এইচডি কোয়ালিটি
+                        } catch(canvasErr) {
+                            resolve(evt.target.result);
+                        }
+                    };
+                    img.onerror = function() {
+                        clearTimeout(timeoutId);
+                        resolve(evt.target.result);
+                    };
+                    img.src = evt.target.result;
+                };
+                reader.onerror = function() {
+                    clearTimeout(timeoutId);
+                    reject(new Error("ফাইলটি পড়া সম্ভব হয়নি"));
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // নতুন পণ্য যোগ করার ১০০% ফিক্সড ও দ্রুতগতির ফাংশন
+        window.handleAddProduct = async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById("saveProdBtn");
+            const fileInput = document.getElementById("prodImageFile");
+
+            if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+                alert("দয়া করে পণ্যের একটি ছবি বেছে নিন!");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "ছবি প্রসেস হচ্ছে...";
+
+            try {
+                // ১. সরাসরি ব্রাউজারে নিমিষে ছবি অপ্টিমাইজ
+                const prodImageUrl = await convertProductFileToFastData(fileInput.files[0]);
+
+                if (!prodImageUrl) {
+                    throw new Error("ছবিটি লোড করা সম্ভব হয়নি!");
+                }
+
+                btn.innerText = "সংরক্ষণ হচ্ছে...";
+
+                // ২. ডেটাবেজে নতুন পণ্য যোগ
+                const newProd = {
+                    name: document.getElementById("prodName").value.trim(),
+                    category: document.getElementById("prodCategory").value,
+                    price: parseFloat(document.getElementById("prodPrice").value),
+                    regularPrice: document.getElementById("prodRegularPrice").value ? parseFloat(document.getElementById("prodRegularPrice").value) : null,
+                    unit: document.getElementById("prodUnit").value.trim(),
+                    image: prodImageUrl,
+                    description: document.getElementById("prodDesc").value.trim(),
+                    inStock: true,
+                    createdAt: serverTimestamp()
+                };
+
+                await addDoc(collection(db, "products"), newProd);
+                alert("পণ্য সফলভাবে যুক্ত হয়েছে! ✅");
+                document.getElementById("addProductForm").reset();
+                closeProductModal();
+                loadProducts();
+            } catch (err) {
+                console.error("Product add error:", err);
+                alert("ত্রুটি: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "পণ্য সংরক্ষণ করুন";
+            }
+        };
+
+let allProductsMasterData = [];
+        let currentProdCatFilter = 'all';
+        let currentProdStockFilter = 'all';
+
+        // ২. রিয়েল পণ্য লোড ও ২-কলামের কার্ড রেন্ডার
+        async function loadProducts() {
+            const recentContainer = document.getElementById("recentProductsContainer");
+            const fullContainer = document.getElementById("fullProductsList");
+            try {
+                const snapshot = await getDocs(collection(db, "products"));
+                allProductsMasterData = [];
+
+                let total = 0, inStockCount = 0, outStockCount = 0;
+
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const id = docSnap.id;
+                    total++;
+                    const inStock = data.inStock !== false;
+                    if(inStock) inStockCount++;
+                    else outStockCount++;
+
+                    allProductsMasterData.push({ id, inStock, ...data });
+                });
+
+                // ড্যাশবোর্ডের মোট পণ্য কাউন্টার
+                document.getElementById("totalProducts").innerText = total.toLocaleString('bn-BD');
+
+                // পণ্য পেজের নিজস্ব ৩টি কাউন্টার আপডেট (রিয়েল ডাটা)
+                if(document.getElementById("prodStatTotal")) document.getElementById("prodStatTotal").innerText = total.toLocaleString('bn-BD');
+                if(document.getElementById("prodStatInStock")) document.getElementById("prodStatInStock").innerText = inStockCount.toLocaleString('bn-BD');
+                if(document.getElementById("prodStatOutStock")) document.getElementById("prodStatOutStock").innerText = outStockCount.toLocaleString('bn-BD');
+
+                renderProductsView(allProductsMasterData);
+
+            } catch(e) {
+                console.error("Products load error:", e);
+            }
+        }
+        window.loadProducts = loadProducts;
+
+        // ২-কলামের কার্ড রেন্ডার ফাংশন (Lucide Icons সহ)
+        function renderProductsView(prodList) {
+            const recentContainer = document.getElementById("recentProductsContainer");
+            const fullContainer = document.getElementById("fullProductsList");
+
+            if(!prodList || prodList.length === 0) {
+                const emptyMsg = `<p style="text-align:center; grid-column:1/-1; padding:30px; color:#9CA3AF;">কোনো পণ্য পাওয়া যায়নি।</p>`;
+                if(recentContainer) recentContainer.innerHTML = emptyMsg;
+                if(fullContainer) fullContainer.innerHTML = emptyMsg;
+                return;
+            }
+
+            const catLabels = { 'aam': 'আম', 'gur': 'গুড়', 'aachar': 'আচার' };
+
+            const html = prodList.map(data => {
+                const inStock = data.inStock !== false;
+                const catName = catLabels[data.category] || (data.category || 'মৌসুমী');
+
+                return `
+                    <div class="prod-card-v2">
+                        <img src="${data.image}" alt="${data.name}">
+                        <div class="prod-card-body-v2">
+                            <div class="prod-title-row">
+                                <h4>${data.name}</h4>
+                                <span class="badge-stock-tag ${inStock ? 'tag-instock' : 'tag-outstock'}">
+                                    ${inStock ? '<i data-lucide="check-circle"></i> স্টকে আছে' : '<i data-lucide="x-circle"></i> স্টক শেষ'}
+                                </span>
+                            </div>
+                            <div class="prod-price-text"><i data-lucide="banknote"></i> ৳${data.price} / ${data.unit || 'কেজি'}</div>
+                            <div class="prod-category-tag"><i data-lucide="tags"></i> ${catName}</div>
+
+                            <div class="prod-card-footer-v2">
+                                <button onclick="toggleStock('${data.id}', ${inStock})" class="btn-toggle-stock-pill ${inStock ? '' : 'out'}" title="স্টক পরিবর্তন করুন">
+                                    ${inStock ? '<i data-lucide="check-circle"></i> স্টক চালু' : '<i data-lucide="x-circle"></i> স্টক বন্ধ'}
+                                </button>
+                                <div class="prod-actions-right">
+                                    <button onclick="editProductPrompt('${data.id}')" class="btn-mini-act" title="মূল্য পরিবর্তন"><i data-lucide="pencil"></i></button>
+                                    <button onclick="deleteProduct('${data.id}')" class="btn-mini-act" title="পণ্য মুছুন" style="color:#DC2626;"><i data-lucide="trash-2"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            if(recentContainer) recentContainer.innerHTML = html;
+            if(fullContainer) fullContainer.innerHTML = html;
+
+            if(window.lucide) lucide.createIcons();
+        }
+
+        // লাইভ সার্চ ফিল্টারিং
+        window.handleProdSearch = function(queryText) {
+            const q = queryText.trim().toLowerCase();
+            applyAllProdFilters(q);
+        };
+
+        // ক্যাটাগরি ফিল্টার ট্যাব
+        window.filterProdByCategory = function(cat, btn) {
+            currentProdCatFilter = cat;
+            btn.parentElement.querySelectorAll('.order-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyAllProdFilters(document.getElementById('prodSearchInput')?.value?.trim()?.toLowerCase() || '');
+        };
+
+        // স্টক ফিল্টার ট্যাব
+        window.filterProdByStock = function(stockType, btn) {
+            currentProdStockFilter = stockType;
+            btn.parentElement.querySelectorAll('.order-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyAllProdFilters(document.getElementById('prodSearchInput')?.value?.trim()?.toLowerCase() || '');
+        };
+
+        function applyAllProdFilters(q) {
+            let filtered = allProductsMasterData;
+
+            if(currentProdCatFilter !== 'all') {
+                filtered = filtered.filter(p => p.category === currentProdCatFilter);
+            }
+
+            if(currentProdStockFilter === 'inStock') {
+                filtered = filtered.filter(p => p.inStock !== false);
+            } else if(currentProdStockFilter === 'outStock') {
+                filtered = filtered.filter(p => p.inStock === false);
+            }
+
+            if(q) {
+                filtered = filtered.filter(p => 
+                    (p.name && p.name.toLowerCase().includes(q)) ||
+                    (p.origin && p.origin.toLowerCase().includes(q))
+                );
+            }
+
+            renderProductsView(filtered);
+        }
+
+        // দ্রুত পণ্যের মূল্য এডিট করা
+        window.editProductPrompt = async function(id) {
+            const prod = allProductsMasterData.find(p => p.id === id);
+            if(!prod) return;
+            const newPrice = prompt(`"${prod.name}"-এর নতুন মূল্য (টাকা) লিখুন:`, prod.price);
+            if(newPrice && !isNaN(newPrice)) {
+                await updateDoc(doc(db, "products", id), { price: parseFloat(newPrice) });
+                alert("মূল্য সফলভাবে আপডেট হয়েছে! ✅");
+                loadProducts();
+            }
+        };
+
+        window.toggleStock = async function(id, currentStatus) {
+            await updateDoc(doc(db, "products", id), { inStock: !currentStatus });
+            loadProducts();
+        };
+
+        window.deleteProduct = async function(id) {
+            if(confirm("পণ্যটি মুছে ফেলতে চান?")) {
+                await deleteDoc(doc(db, "products", id));
+                loadProducts();
+            }
+        };
+
+        
+
+        // এডমিনের স্ক্রিনে তাৎক্ষণিক লোগো দেখানোর ফাংশন
+        function renderAdminLogoInstantly(logoUrl) {
+            if (!logoUrl) return;
+            const previewBox = document.getElementById("logoPreviewBox");
+            if(previewBox) {
+                previewBox.innerHTML = `<img src="${logoUrl}" style="width:100%; height:100%; object-fit:contain; display:block;">`;
+            }
+            const adminTopBrand = document.querySelector(".brand-icon-box");
+            if(adminTopBrand) {
+                adminTopBrand.innerHTML = `<img src="${logoUrl}" style="width:100%; height:100%; border-radius:inherit; object-fit:contain; display:block;">`;
+            }
+        }
+
+        // পেজ ঢোকার সঙ্গে সঙ্গে ক্যাশ থেকে লোগো লোড
+        const cachedAdminLogo = localStorage.getItem('cachedSiteLogo');
+        if (cachedAdminLogo) {
+            renderAdminLogoInstantly(cachedAdminLogo);
+        }
+
+        // ৪. সেটিংস ও আপলোড করা লোগো লোড করা
+        async function loadSettings() {
+            try {
+                const docSnap = await getDoc(doc(db, "settings", "general"));
+                if(docSnap.exists()) {
+                    existingSettings = docSnap.data();
+                    const s = existingSettings;
+
+                    // লোগো লোড এবং এডমিন টপ বার ও প্রিভিউ বক্সে বসানো
+                    if(s.logoUrl) {
+                        localStorage.setItem('cachedSiteLogo', s.logoUrl);
+                        renderAdminLogoInstantly(s.logoUrl);
+                    }
+
+                    // সাধারণ ও যোগাযোগ সেটিংস
+                    if(document.getElementById("setAnnouncement")) document.getElementById("setAnnouncement").value = s.announcement || "";
+                    if(document.getElementById("setDeliveryFee")) document.getElementById("setDeliveryFee").value = (s.deliveryFee !== undefined && s.deliveryFee !== null) ? s.deliveryFee : "";
+                    if(document.getElementById("setEmail")) document.getElementById("setEmail").value = s.email || "";
+                    if(document.getElementById("setAddress")) document.getElementById("setAddress").value = s.address || "";
+                    if(document.getElementById("setPhone")) document.getElementById("setPhone").value = s.phone || "";
+                    if(document.getElementById("setWhatsapp")) document.getElementById("setWhatsapp").value = s.whatsapp || "";
+
+                    // হোমপেজ কাউন্টার
+                    if(document.getElementById("statMango")) document.getElementById("statMango").value = s.statMango || "";
+                    if(document.getElementById("statGur")) document.getElementById("statGur").value = s.statGur || "";
+                    if(document.getElementById("statAachar")) document.getElementById("statAachar").value = s.statAachar || "";
+                    if(document.getElementById("statFamily")) document.getElementById("statFamily").value = s.statFamily || "";
+
+                }
+            } catch(e) {
+                console.error("Settings load error:", e);
+            }
+        }
+
+        // সুপার-ফাস্ট ও বুলেটপ্রুফ লোগো কনভার্টার
+        function convertLogoFileToFastData(file) {
+            return new Promise((resolve, reject) => {
+                const timeoutId = setTimeout(() => {
+                    reject(new Error("ছবি প্রসেসিংয়ে অতিরিক্ত সময় নিচ্ছে। অন্য ছোট ছবি চেষ্টা করুন।"));
+                }, 5000);
+
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const img = new Image();
+                    img.onload = function() {
+                        clearTimeout(timeoutId);
+                        try {
+                            const canvas = document.createElement("canvas");
+                            let maxDim = 250;
+                            let w = img.width;
+                            let h = img.height;
+                            if (w > h) {
+                                if (w > maxDim) { h = Math.round((h * maxDim) / w); w = maxDim; }
+                            } else {
+                                if (h > maxDim) { w = Math.round((w * maxDim) / h); h = maxDim; }
+                            }
+                            canvas.width = w;
+                            canvas.height = h;
+                            const ctx = canvas.getContext("2d");
+                            ctx.drawImage(img, 0, 0, w, h);
+                            // PNG ফরম্যাট যাতে লোগোর ব্যাকগ্রাউন্ড ট্রান্সপারেন্সি বজায় থাকে
+                            resolve(canvas.toDataURL("image/png"));
+                        } catch(canvasErr) {
+                            // ক্যানভাস ফেইল করলে সরাসরি রিডার রেজাল্ট ব্যবহার করবে
+                            resolve(evt.target.result);
+                        }
+                    };
+                    img.onerror = function() {
+                        clearTimeout(timeoutId);
+                        resolve(evt.target.result);
+                    };
+                    img.src = evt.target.result;
+                };
+                reader.onerror = function() {
+                    clearTimeout(timeoutId);
+                    reject(new Error("ফাইলটি পড়া সম্ভব হয়নি"));
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // লোগো আপলোডের অটোমেটিক সার্ভার-ক্লিনআপ ফাংশন
+        window.uploadSiteLogo = async function() {
+            const fileInput = document.getElementById("newLogoFile");
+            const btn = document.getElementById("btnUploadLogo");
+
+            if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+                alert("দয়া করে লোগোর একটি ছবি সিলেক্ট করুন!");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "যাচাই ও প্রসেসিং...";
+
+            try {
+                // ১. ডেটাবেজ থেকে আগের পুরনো লোগোর লিংক খুঁজে বের করা
+                let oldLogoUrl = null;
+                try {
+                    const currentSnap = await getDoc(doc(db, "settings", "general"));
+                    if (currentSnap.exists()) {
+                        oldLogoUrl = currentSnap.data().logoUrl || null;
+                    }
+                } catch(fetchErr) {
+                    console.warn("আগের লোগো তথ্য পাওয়ার সময় সতর্কবার্তা:", fetchErr);
+                }
+
+                btn.innerText = "সংরক্ষণ হচ্ছে...";
+
+                // ২. নতুন লোগোকে দ্রুত ও অপ্টিমাইজড ফরম্যাটে রূপান্তর
+                const fastLogoData = await convertLogoFileToFastData(fileInput.files[0]);
+
+                if (!fastLogoData) {
+                    throw new Error("ছবিটি লোড করা সম্ভব হয়নি!");
+                }
+
+                // ৩. ফায়ারবেস ডেটাবেজে নতুন লোগো সংরক্ষণ (আগের ভ্যালুটি স্বয়ংক্রিয়ভাবে রিপ্লেস হবে)
+                await setDoc(doc(db, "settings", "general"), { logoUrl: fastLogoData }, { merge: true });
+
+                // ৪. অটোমেটিক সার্ভার ক্লিনআপ: আগের লোগোটি যদি Firebase Storage-এর ফাইল হয়ে থাকে তবে তা সার্ভার থেকে চিরতরে মুছে ফেলা
+                if (oldLogoUrl && typeof oldLogoUrl === 'string' && oldLogoUrl.includes("firebasestorage.googleapis.com")) {
+                    try {
+                        const oldStorageRef = ref(storage, oldLogoUrl);
+                        await deleteObject(oldStorageRef);
+                        console.log("আগের পুরনো লোগো সার্ভার থেকে স্বয়ংক্রিয়ভাবে মুছে ফেলা হয়েছে ✅");
+                    } catch(storageDelErr) {
+                        console.warn("সার্ভারের পুরনো ফাইল মোছার সময় সতর্কতা:", storageDelErr);
+                    }
+                }
+
+                alert("নতুন লোগো সফলভাবে সেট হয়েছে এবং আগের ছবি সার্ভার থেকে পরিষ্কার করা হয়েছে! ✅");
+                fileInput.value = "";
+
+                // সাথে সাথে লোকাল ক্যাশ আপডেট যাতে কোনো লোডিং ছাড়া সরাসরি দেখা যায়
+                localStorage.setItem('cachedSiteLogo', fastLogoData);
+                renderAdminLogoInstantly(fastLogoData);
+
+                loadSettings();
+            } catch(err) {
+                console.error("Logo Upload Failed:", err);
+                alert("ত্রুটি: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "লোগো আপলোড করুন";
+            }
+        };
+
+        // সেটিংস সেভ করা (পাবলিক সেটিংসে আর অ্যাডমিন পিন থাকবে না)
+        window.handleSaveSettings = async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById("saveSettingsBtn");
+            btn.disabled = true;
+            btn.innerText = "সংরক্ষণ হচ্ছে...";
+
+            try {
+                const settingsData = {
+                    announcement: document.getElementById("setAnnouncement")?.value?.trim() || "",
+                    deliveryFee: Number(document.getElementById("setDeliveryFee")?.value) || 0,
+                    email: document.getElementById("setEmail")?.value?.trim() || "",
+                    address: document.getElementById("setAddress")?.value?.trim() || "",
+                    phone: document.getElementById("setPhone")?.value?.trim() || "",
+                    whatsapp: document.getElementById("setWhatsapp")?.value?.trim() || "",
+                    statMango: document.getElementById("statMango")?.value?.trim() || "",
+                    statGur: document.getElementById("statGur")?.value?.trim() || "",
+                    statAachar: document.getElementById("statAachar")?.value?.trim() || "",
+                    statFamily: document.getElementById("statFamily")?.value?.trim() || ""
+                };
+
+                await setDoc(doc(db, "settings", "general"), settingsData, { merge: true });
+                existingSettings = settingsData;
+                alert("সব সেটিংস সফলভাবে ডাটাবেজে সংরক্ষিত হয়েছে! ✅");
+            } catch (err) {
+                alert("সেটিংস সেভ হতে সমস্যা হয়েছে: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<span>💾</span> <span>সেটিংস সংরক্ষণ করুন</span>`;
+            }
+        };
+
+        // অ্যাডমিন পিন / পাসওয়ার্ড পরিবর্তন (নিরাপদ হ্যাশ সহ)
+        window.changeAdminPin = async function() {
+            const curr = document.getElementById("currAdminPin")?.value?.trim();
+            const newPin = document.getElementById("newAdminPin")?.value?.trim();
+            const confirmPin = document.getElementById("confirmAdminPin")?.value?.trim();
+
+            if(!curr || !newPin || !confirmPin) {
+                alert("দয়া করে পিনের সবগুলো ঘর পূরণ করুন!");
+                return;
+            }
+
+            const currHash = await hashPin(curr);
+            if(currHash !== currentAdminPinHash) {
+                alert("আপনার বর্তমান PIN ভুল হয়েছে!");
+                return;
+            }
+
+            if(newPin !== confirmPin) {
+                alert("নতুন PIN এবং নিশ্চিতকরণ PIN মেলেনি!");
+                return;
+            }
+
+            if(newPin.length < 4) {
+                alert("নতুন পিন কমপক্ষে ৪ অক্ষরের হতে হবে!");
+                return;
+            }
+
+            try {
+                const newHash = await hashPin(newPin);
+                // আলাদা গোপন ডকুমেন্টে হ্যাশ হিসেবে সেভ হবে
+                await setDoc(doc(db, "settings", "admin_auth"), { pinHash: newHash });
+                currentAdminPinHash = newHash;
+
+                try {
+                    await updateDoc(doc(db, "settings", "general"), { adminPin: deleteField() });
+                } catch(ign) {}
+
+                alert("অ্যাডমিন PIN সফলভাবে পরিবর্তন হয়েছে! ✅");
+                document.getElementById("currAdminPin").value = "";
+                document.getElementById("newAdminPin").value = "";
+                document.getElementById("confirmAdminPin").value = "";
+            } catch(e) {
+                alert("পিন পরিবর্তনে সমস্যা হয়েছে: " + e.message);
+            }
+        };
+
+        // পাসওয়ার্ড দেখানো বা লুকানো (SVG Eye Toggle)
+        window.togglePinVisibility = function(inputId, iconElem) {
+            const field = document.getElementById(inputId);
+            if(!field) return;
+            if(field.type === "password") {
+                field.type = "text";
+                iconElem.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3 21 21"/><path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a16 16 0 0 1-4 4.9"/><path d="M6.6 6.6C3.6 8.5 2 12 2 12s3.6 7 10 7a10 10 0 0 0 4-.8"/></svg>`;
+            } else {
+                field.type = "password";
+                iconElem.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>`;
+            }
+        };
+
+        // পরিবর্তন বাতিল করে ডাটাবেজের পূর্বের মানে ফেরত যাওয়া
+        window.cancelSettingsChanges = function() {
+            if(confirm("অসংরক্ষিত পরিবর্তনগুলো বাতিল করতে চান?")) {
+                loadSettings();
+            }
+        };
+
+        // সেটিংস ট্যাবের স্মুথ স্ক্রল
+        window.scrollSettingsTo = function(elementId, btn) {
+            document.querySelectorAll('.set-nav-pill').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            const target = document.getElementById(elementId);
+            if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        if(sessionStorage.getItem("adminAuth") === "true") {
+            document.getElementById("loginScreen").style.display = "none";
+            initAdmin();
+        }
+        // Lucide আইকন রেন্ডার করা
+        lucide.createIcons();
+    </script>
+</body>
+</html>
