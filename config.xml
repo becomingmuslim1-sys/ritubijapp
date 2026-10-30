@@ -5,6 +5,15 @@
     <author email="info@ritubij.com" href="https://ritubij.com">Ritubij Team</author>
     <content src="index.html" />
     <icon src="res/icon.png" />
+    
+    <!-- স্প্ল্যাশ স্ক্রিনে নিজস্ব লোগো ও ব্যাকগ্রাউন্ড সেট -->
+    <platform name="android">
+        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/icon.png" />
+        <preference name="AndroidWindowSplashScreenBackground" value="#ffffff" />
+        <preference name="AutoHideSplashScreen" value="true" />
+        <preference name="SplashScreenDelay" value="1500" />
+    </platform>
+
     <access origin="*" />
     <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
